@@ -12,7 +12,7 @@ class Sprite(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
 class Player(Sprite):
-    def __init__(self, startx, starty):
+    def __init__(self, startx, starty, collisionGroup):
         super().__init__("sprites/idle.gif", startx, starty)
         self.stand_image = self.image
 
@@ -21,21 +21,41 @@ class Player(Sprite):
         self.facing_left = False
 
         self.speed = 4
+        self.jumpspeed = 20
+        self.verticalspeed = 0
+        self.gravity = 1
+        self.collisionGroup = collisionGroup
 
     def update(self):
-        # ...
-        # check keys
+
+        horziontalspeed = 0
+        onground = pygame.sprite.spritecollideany(self, self.collisionGroup)
+
+
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
             self.facing_left = True
             self.walk_animation()
-            self.move(-self.speed, 0)
+            horziontalspeed = -self.speed
         elif key[pygame.K_RIGHT]:
             self.facing_left = False
             self.walk_animation()
-            self.move(self.speed, 0)
+            horziontalspeed = self.speed
+
+        if key[pygame.K_UP] and onground:
+            self.verticalspeed = -self.jumpspeed
+
+        if self.verticalspeed < 10 and not onground:
+            self.verticalspeed += self.gravity
+
+        if self.verticalspeed > 0 and onground:
+            self.verticalspeed = 0
+
         else:
             self.image = self.stand_image
+
+        self.move(horziontalspeed, self.verticalspeed)
+
 
     def walk_animation(self):
         self.image = self.walk_cycle[self.animation_index]
@@ -69,8 +89,11 @@ def main():
     background = pygame.image.load("background/bg.png")
 
     # Set player and objects
-    player = Player(WIDTH // 2, HEIGHT // 2)
-    oil_Drum = Box(100, 100, "sprites/Oil_Drum.png")
+    boxes = pygame.sprite.Group()
+    for bx in range(0,600,32):
+        boxes.add(Box(bx, 450, "sprites/Oil_Drum.png"))
+
+    player = Player(WIDTH // 2, HEIGHT // 2, boxes)
 
     pygame.init()
 
@@ -94,7 +117,7 @@ def main():
                     screen.blit(background, (x,y))
         # Draw screen
         player.draw(screen)
-        oil_Drum.draw(screen)
+        boxes.draw(screen)
         pygame.display.flip()
 
         clock.tick(60)
