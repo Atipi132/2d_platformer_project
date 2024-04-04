@@ -15,6 +15,7 @@ class Player(Sprite):
     def __init__(self, startx, starty, collisionGroup):
         super().__init__("sprites/idle.gif", startx, starty)
         self.stand_image = self.image
+        self.jump_image = pygame.image.load("sprites/jump.png")
 
         self.walk_cycle = [pygame.image.load("sprites/JungleRun/Course- ({}).png".format(i)) for i in range(1, 8)]
         self.animation_index = 0
@@ -57,12 +58,13 @@ class Player(Sprite):
 
 
         if self.verticalspeed < 10 and not onground:
+            self.jump_animation()
             self.verticalspeed += self.gravity
+
 
         if self.verticalspeed > 0 and onground:
             self.verticalspeed = 0
 
-        
 
         self.move(horziontalspeed, self.verticalspeed)
 
@@ -76,6 +78,11 @@ class Player(Sprite):
             self.animation_index += 1
         else:
             self.animation_index = 0
+
+    def jump_animation(self):
+        self.image = self.jump_image
+        if self.facing_left:
+            self.image = pygame.transform.flip(self.image, True, False)
 
     def move(self, x: int, y: int):
         dx = x
