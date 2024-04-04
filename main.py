@@ -56,7 +56,7 @@ class Player(Sprite):
             self.attack_animation()
             horizontalspeed = 0
 
-        if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]:
+        if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]: #bloque le deplacement pendant l'attaque
             horizontalspeed = self.speed
 
         # variable height jumping
