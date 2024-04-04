@@ -16,6 +16,7 @@ class Player(Sprite):
         super().__init__("sprites/idle.gif", startx, starty)
         self.stand_image = self.image
         self.jump_image = pygame.image.load("sprites/jump.png")
+        self.attack_image = pygame.image.load("sprites/Punch.png")
 
         self.walk_cycle = [pygame.image.load("sprites/JungleRun/Course- ({}).png".format(i)) for i in range(1, 8)]
         self.animation_index = 0
@@ -49,6 +50,10 @@ class Player(Sprite):
 
         if key[pygame.K_UP] and onground:
             self.verticalspeed = -self.jumpspeed
+
+        if key[pygame.K_a]:
+            self.attack()
+            self.attack_animation()
 
         # variable height jumping
         if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]:
@@ -84,6 +89,11 @@ class Player(Sprite):
         if self.facing_left:
             self.image = pygame.transform.flip(self.image, True, False)
 
+    def attack_animation(self):
+        self.image = self.attack_image
+        if self.facing_left:
+            self.image = pygame.transform.flip(self.image, True, False)
+
     def move(self, x: int, y: int):
         dx = x
         dy = y
@@ -96,6 +106,18 @@ class Player(Sprite):
 
         self.rect.move_ip([dx, dy])
 
+    def attack(self):
+        # Create an attack box in front of the player
+        attack_damage = 10
+        attack_duration = 10
+        if self.facing_left:
+            attack_position = (self.rect.left - 32, self.rect.centery)
+        else:
+            attack_position = (self.rect.right + 32, self.rect.centery)
+
+        attack_box = AttackBox(*attack_position, attack_damage, attack_duration)
+
+
     def check_collisions(self, x: int, y: int):
         self.rect.move_ip([x,y]) # move the player
         collide = pygame.sprite.spritecollideany(self, self.collisionGroup) # check for collision
@@ -107,6 +129,19 @@ class Player(Sprite):
 class Box(Sprite):
     def __init__(self, startx: int, starty: int, image_src: str):
         super().__init__(image_src, startx, starty)
+
+class AttackBox(Sprite):
+    def __init__(self, startx: int, starty: int, damage: int, duration: int):
+        super().__init__("sprites/attack_box.png", startx, starty)
+        self.damage = damage
+        self.duration = 1
+        self.lifetime = 2  # Lifetime counter
+
+    def update(self):
+        # Decrease lifetime
+        self.lifetime -= 1
+        if self.lifetime <= 0:
+            self.kill()  # Destroy the attack box when its lifetime ends
 
 
 def main():
