@@ -13,8 +13,8 @@ Il faudra donc implémenter :
 ## Répartition des tâches
 
 ### 1. Physique et animations
--   Hugo s'occupera de faire fonctionner un sytème de physique
--   Ylian s'occupera des animations
+-   [Hugo](https://github.com/Atipi132) s'occupera de faire fonctionner un sytème de physique (Réalisé pendant la séance du Mardi 02/04/2024)
+-   [Ylian](https://github.com/TDEVYS) s'occupera des animations (Réalisé pendant la séance du Mardi 02/04/2024)
 
 
 ## Ressources
