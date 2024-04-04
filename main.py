@@ -32,7 +32,7 @@ class Player(Sprite):
 
     def update(self):
 
-        horziontalspeed = 0
+        horizontalspeed = 0
         onground = self.check_collisions(0, 1)
 
 
@@ -40,11 +40,11 @@ class Player(Sprite):
         if key[pygame.K_LEFT]:
             self.facing_left = True
             self.walk_animation()
-            horziontalspeed = -self.speed
+            horizontalspeed = -self.speed
         elif key[pygame.K_RIGHT]:
             self.facing_left = False
             self.walk_animation()
-            horziontalspeed = self.speed
+            horizontalspeed = self.speed
         else:
             self.image = self.stand_image    
 
@@ -54,6 +54,10 @@ class Player(Sprite):
         if key[pygame.K_a]:
             self.attack()
             self.attack_animation()
+            horizontalspeed = 0
+
+        if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]:
+            horizontalspeed = self.speed
 
         # variable height jumping
         if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]:
@@ -71,7 +75,7 @@ class Player(Sprite):
             self.verticalspeed = 0
 
 
-        self.move(horziontalspeed, self.verticalspeed)
+        self.move(horizontalspeed, self.verticalspeed)
 
 
     def walk_animation(self):
