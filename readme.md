@@ -16,10 +16,13 @@ Il faudra donc implémenter :
 -   [Hugo](https://github.com/Atipi132) s'occupera de faire fonctionner un sytème de physique (Réalisé pendant la séance du Mardi 02/04/2024)
 -   [Ylian](https://github.com/TDEVYS) s'occupera des animations (Réalisé pendant la séance du Mardi 02/04/2024)
 
+### 2. Attaques et ennemis (Jeudi 04/04/2024)
+-   [Hugo](https://github.com/Atipi132) a créé une nouvelle classe pour les Non-playable characters, plus particulièrement les ennemis.
+-   [Ylian](https://github.com/TDEVYS) a ajouté des animations et créé un prototype d'attaque pour le joueur.
 
 ## Ressources
 
-Nous nous sommes aidé de turoriels tels que [celui-ci](https://docs.replit.com/tutorials/python/2d-platform-game).
+Nous nous sommes aidé de tutoriels tels que [celui-ci](https://docs.replit.com/tutorials/python/2d-platform-game) et utilisé des [ressources libres de droit pour les pour les graphismes](https://jesse-m.itch.io/jungle-pack).
 
 
 
