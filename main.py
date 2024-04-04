@@ -30,19 +30,18 @@ class Player(Sprite):
 
     def update(self):
 
-        horziontalspeed = 0
-        onground = self.check_collisions(0, 1)
-
+        horizontal_speed = 0
+        onground = self.check_collisions(0, 1, self.collisionGroup)
 
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
             self.facing_left = True
             self.walk_animation()
-            horziontalspeed = -self.speed
+            horizontal_speed = -self.speed
         elif key[pygame.K_RIGHT]:
             self.facing_left = False
             self.walk_animation()
-            horziontalspeed = self.speed
+            horizontal_speed = self.speed
         else:
             self.image = self.stand_image    
 
@@ -64,7 +63,7 @@ class Player(Sprite):
 
         
 
-        self.move(horziontalspeed, self.verticalspeed)
+        self.move(horizontal_speed, self.verticalspeed)
 
 
     def walk_animation(self):
@@ -81,21 +80,63 @@ class Player(Sprite):
         dx = x
         dy = y
         
-        while self.check_collisions(0, dy):
+        while self.check_collisions(0, dy, self.collisionGroup):
             dy -= 1 if dy > 0 else -1 if dy <0 else 0
 
-        while self.check_collisions(dx, dy):
+        while self.check_collisions(dx, dy, self.collisionGroup):
             dx -= 1 if dx > 0 else -1 if dx < 0 else 0
 
         self.rect.move_ip([dx, dy])
 
-    def check_collisions(self, x: int, y: int):
+    def check_collisions(self, x: int, y: int, collisionGroup):
         self.rect.move_ip([x,y]) # move the player
-        collide = pygame.sprite.spritecollideany(self, self.collisionGroup) # check for collision
+        collide = pygame.sprite.spritecollideany(self, collisionGroup) # check for collision
         self.rect.move_ip([-x,-y]) # move the player back to the original coordinates ; all of this is done before the player is drawn to the screen so the user doesn't see anything
         return collide
 
-    
+
+class NonPlayingCharacter(Player):
+    def __init__(self, startx: int, starty: int, collisionGroup, player: Player):
+        super().__init__(startx, starty, collisionGroup)
+        self.side = 'L'
+        group = pygame.sprite.Group()
+        group.add(player)
+        self.player_group = group
+
+    def update(self):
+        horizontal_speed = 0
+        onground = self.check_collisions(0, 1, self.collisionGroup)
+
+        if self.side == 'L':
+            if not self.check_collisions(-1, 0, self.collisionGroup):
+                self.facing_left = True
+                self.walk_animation()
+                horizontal_speed = -self.speed
+            else:
+                self.facing_left = False
+                self.walk_animation()
+                horizontal_speed = self.speed
+                self.side = 'R'
+        
+        else:
+            if not self.check_collisions(1, 0, self.collisionGroup):
+                self.facing_left = False
+                self.walk_animation()
+                horizontal_speed = self.speed
+            else:
+                self.facing_left = False
+                self.walk_animation()
+                horizontal_speed = self.speed
+                self.side = 'L'
+
+        if not onground:
+            self.verticalspeed += self.gravity
+
+        self.move(horizontal_speed, self.verticalspeed)
+        if self.check_collisions(0, 0, self.player_group):
+            pygame.quit()
+            print("collision with player")
+
 
 class Box(Sprite):
     def __init__(self, startx: int, starty: int, image_src: str):
@@ -125,6 +166,8 @@ def main():
 
     player = Player(WIDTH // 2, HEIGHT // 2, boxes)
 
+    npc = NonPlayingCharacter(WIDTH // 2 - 200, HEIGHT // 2 + 100, boxes, player)
+
     pygame.init()
 
     # Setup clock
@@ -140,6 +183,7 @@ def main():
         # Update player position
         pygame.event.pump()
         player.update()
+        npc.update()
 
         # Draw background
         for y in range(0, 600, 512):
@@ -148,6 +192,7 @@ def main():
                     
         # Draw screen
         player.draw(screen)
+        npc.draw(screen)
         boxes.draw(screen)
         pygame.display.flip()
 
