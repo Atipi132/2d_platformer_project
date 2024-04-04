@@ -22,6 +22,8 @@ class Player(Sprite):
 
         self.speed = 4
         self.jumpspeed = 20
+        self.min_jumpspeed = 3
+        self.previous_key = pygame.key.get_pressed()
         self.verticalspeed = 0
         self.gravity = 1
         self.collisionGroup = collisionGroup
@@ -29,7 +31,7 @@ class Player(Sprite):
     def update(self):
 
         horziontalspeed = 0
-        onground = pygame.sprite.spritecollideany(self, self.collisionGroup)
+        onground = self.check_collisions(0, 1)
 
 
         key = pygame.key.get_pressed()
@@ -41,9 +43,18 @@ class Player(Sprite):
             self.facing_left = False
             self.walk_animation()
             horziontalspeed = self.speed
+        else:
+            self.image = self.stand_image    
 
         if key[pygame.K_UP] and onground:
             self.verticalspeed = -self.jumpspeed
+
+        # variable height jumping
+        if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]:
+            if self.verticalspeed < -self.min_jumpspeed:
+                self.verticalspeed = -self.min_jumpspeed
+        self.previous_key = key
+
 
         if self.verticalspeed < 10 and not onground:
             self.verticalspeed += self.gravity
@@ -51,8 +62,7 @@ class Player(Sprite):
         if self.verticalspeed > 0 and onground:
             self.verticalspeed = 0
 
-        else:
-            self.image = self.stand_image
+        
 
         self.move(horziontalspeed, self.verticalspeed)
 
@@ -68,7 +78,24 @@ class Player(Sprite):
             self.animation_index = 0
 
     def move(self, x: int, y: int):
-        self.rect.move_ip([x,y])
+        dx = x
+        dy = y
+        
+        while self.check_collisions(0, dy):
+            dy -= 1 if dy > 0 else -1 if dy <0 else 0
+
+        while self.check_collisions(dx, dy):
+            dx -= 1 if dx > 0 else -1 if dx < 0 else 0
+
+        self.rect.move_ip([dx, dy])
+
+    def check_collisions(self, x: int, y: int):
+        self.rect.move_ip([x,y]) # move the player
+        collide = pygame.sprite.spritecollideany(self, self.collisionGroup) # check for collision
+        self.rect.move_ip([-x,-y]) # move the player back to the original coordinates ; all of this is done before the player is drawn to the screen so the user doesn't see anything
+        return collide
+
+    
 
 class Box(Sprite):
     def __init__(self, startx: int, starty: int, image_src: str):
@@ -93,6 +120,9 @@ def main():
     for bx in range(0,600,32):
         boxes.add(Box(bx, 450, "sprites/Oil_Drum.png"))
 
+    big_box = Box(64, 400, "sprites/Oil_Drum.png")
+    boxes.add(big_box)
+
     player = Player(WIDTH // 2, HEIGHT // 2, boxes)
 
     pygame.init()
@@ -115,6 +145,7 @@ def main():
         for y in range(0, 600, 512):
                 for x in range(0, 800, 512):
                     screen.blit(background, (x,y))
+                    
         # Draw screen
         player.draw(screen)
         boxes.draw(screen)
