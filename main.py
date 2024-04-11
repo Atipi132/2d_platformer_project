@@ -12,15 +12,19 @@ class Sprite(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
 class Player(Sprite):
-    def __init__(self, startx, starty, collisionGroup):
-        super().__init__("sprites/RedHoodSprite/Course/RedHood-idle.png", startx, starty)
+    def __init__(self, startx, starty, collision_group):
+        super().__init__("sprites/idle.gif", startx, starty)
         self.stand_image = self.image
         self.jump_image = pygame.image.load("sprites/jump.png")
         self.attack_image = pygame.image.load("sprites/Punch.png")
 
-        self.walk_cycle = [pygame.image.load("sprites/RedHoodSprite/Course/RedHood-Course ({}).png".format(i)) for i in range(1, 24)]
+        self.walk_cycle = [pygame.image.load("sprites/JungleRun/Course- ({}).png".format(i)) for i in range(1, 8)]
         self.animation_index = 0
-        self.facing_left = True
+        self.facing_left = False
+
+        self.currently_attacking = False
+        self.attack_cooldown = 0
+        self.dead = False
 
         self.speed = 4
         self.jumpspeed = 20
@@ -28,12 +32,12 @@ class Player(Sprite):
         self.previous_key = pygame.key.get_pressed()
         self.verticalspeed = 0
         self.gravity = 1
-        self.collisionGroup = collisionGroup
+        self.collision_group = collision_group
 
     def update(self):
 
         horizontal_speed = 0
-        onground = self.check_collisions(0, 1, self.collisionGroup)
+        onground = self.check_collisions(0, 1, self.collision_group)
 
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
@@ -50,10 +54,19 @@ class Player(Sprite):
         if key[pygame.K_UP] and onground:
             self.verticalspeed = -self.jumpspeed
 
-        if key[pygame.K_a]:
+        if (key[pygame.K_a] and self.attack_cooldown == 0 and not self.previous_key[pygame.K_a]) or (self.previous_key[pygame.K_a] and self.attack_cooldown != 0):
+            self.currently_attacking = True
+            if not self.previous_key[pygame.K_a]:
+                self.attack_cooldown = 15
             self.attack()
             self.attack_animation()
             horizontal_speed = 0
+        else:
+            self.currently_attacking = False
+        
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+            
 
         if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]: # bloque le deplacement pendant l'attaque
             horizontal_speed = self.speed
@@ -72,8 +85,6 @@ class Player(Sprite):
 
         if self.verticalspeed > 0 and onground:
             self.verticalspeed = 0
-
-        
 
         self.move(horizontal_speed, self.verticalspeed)
 
@@ -102,10 +113,10 @@ class Player(Sprite):
         dx = x
         dy = y
         
-        while self.check_collisions(0, dy, self.collisionGroup):
+        while self.check_collisions(0, dy, self.collision_group):
             dy -= 1 if dy > 0 else -1 if dy <0 else 0
 
-        while self.check_collisions(dx, dy, self.collisionGroup):
+        while self.check_collisions(dx, dy, self.collision_group):
             dx -= 1 if dx > 0 else -1 if dx < 0 else 0
 
         self.rect.move_ip([dx, dy])
@@ -119,19 +130,19 @@ class Player(Sprite):
         else:
             attack_position = (self.rect.right + 32, self.rect.centery)
 
-        attack_box = AttackBox(*attack_position, attack_damage, attack_duration)
+        attack_box = AttackBox(attack_position[0], attack_position[1], attack_damage, attack_duration)
 
 
-    def check_collisions(self, x: int, y: int, collisionGroup):
+    def check_collisions(self, x: int, y: int, collision_group):
         self.rect.move_ip([x,y]) # move the player
-        collide = pygame.sprite.spritecollideany(self, collisionGroup) # check for collision
+        collide = pygame.sprite.spritecollideany(self, collision_group) # check for collision
         self.rect.move_ip([-x,-y]) # move the player back to the original coordinates ; all of this is done before the player is drawn to the screen so the user doesn't see anything
         return collide
 
 
 class NonPlayingCharacter(Player):
-    def __init__(self, startx: int, starty: int, collisionGroup, player: Player):
-        super().__init__(startx, starty, collisionGroup)
+    def __init__(self, startx: int, starty: int, collision_group, player: Player):
+        super().__init__(startx, starty, collision_group)
         self.side = 'L'
         group = pygame.sprite.Group()
         group.add(player)
@@ -139,10 +150,10 @@ class NonPlayingCharacter(Player):
 
     def update(self):
         horizontal_speed = 0
-        onground = self.check_collisions(0, 1, self.collisionGroup)
+        onground = self.check_collisions(0, 1, self.collision_group)
 
         if self.side == 'L':
-            if not self.check_collisions(-1, 0, self.collisionGroup):
+            if not self.check_collisions(-1, 0, self.collision_group):
                 self.facing_left = True
                 self.walk_animation()
                 horizontal_speed = -self.speed
@@ -153,7 +164,7 @@ class NonPlayingCharacter(Player):
                 self.side = 'R'
         
         else:
-            if not self.check_collisions(1, 0, self.collisionGroup):
+            if not self.check_collisions(1, 0, self.collision_group):
                 self.facing_left = False
                 self.walk_animation()
                 horizontal_speed = self.speed
@@ -168,13 +179,18 @@ class NonPlayingCharacter(Player):
 
         self.move(horizontal_speed, self.verticalspeed)
         if self.check_collisions(0, 0, self.player_group):
-            pygame.quit()
-            print("collision with player")
+            if self.player_group.sprites()[0].currently_attacking == True and self.facing_left != self.player_group.sprites()[0].facing_left:
+                print("Collision with player detected : NPC died")
+                self.kill()
+            else:
+                self.player_group.sprites()[0].dead = True
+                print("Collision with player detected : Player died")
 
 
 class Box(Sprite):
     def __init__(self, startx: int, starty: int, image_src: str):
         super().__init__(image_src, startx, starty)
+        
 
 class AttackBox(Sprite):
     def __init__(self, startx: int, starty: int, damage: int, duration: int):
@@ -213,7 +229,11 @@ def main():
 
     player = Player(WIDTH // 2, HEIGHT // 2, boxes)
 
+    npc_sprite_group = pygame.sprite.Group()
+    
     npc = NonPlayingCharacter(WIDTH // 2 - 200, HEIGHT // 2 + 100, boxes, player)
+    npc_sprite_group.add(npc)
+
 
     pygame.init()
 
@@ -221,7 +241,7 @@ def main():
     clock = pygame.time.Clock()
 
     running = True
-    while running:
+    while running and not player.dead:
         # Check for game quit event
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -239,7 +259,7 @@ def main():
                     
         # Draw screen
         player.draw(screen)
-        npc.draw(screen)
+        npc_sprite_group.draw(screen)
         boxes.draw(screen)
         pygame.display.flip()
 
