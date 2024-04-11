@@ -24,6 +24,7 @@ class Player(Sprite):
 
         self.currently_attacking = False
         self.attack_cooldown = 0
+        self.dead = False
 
         self.speed = 4
         self.jumpspeed = 20
@@ -182,7 +183,7 @@ class NonPlayingCharacter(Player):
                 print("Collision with player detected : NPC died")
                 self.kill()
             else:
-                pygame.quit()
+                self.player_group.sprites()[0].dead = True
                 print("Collision with player detected : Player died")
 
 
@@ -240,7 +241,7 @@ def main():
     clock = pygame.time.Clock()
 
     running = True
-    while running:
+    while running and not player.dead:
         # Check for game quit event
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
