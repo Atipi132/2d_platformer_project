@@ -18,7 +18,7 @@ class Player(Sprite):
         self.jump_image = pygame.image.load("sprites/jump.png")
         self.attack_image = pygame.image.load("sprites/Punch.png")
 
-        self.walk_cycle = [pygame.image.load("sprites/RedHoodSprite/Course/RedHood-Course ({}).png".format(i)) for i in range(1, 8)]
+        self.walk_cycle = [pygame.image.load("sprites/RedHoodSprite/Course/RedHood-Course ({}).png".format(i)) for i in range(1, 25)]
         self.animation_index = 0
         self.facing_left = False
 
