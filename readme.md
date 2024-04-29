@@ -7,18 +7,22 @@ Il faudra donc implémenter :
 - Des ennemies pouvant infliger des dégats au joueur
 
 ## Membres de l'équipe
-- Ylian Sidre
-- Hugo Pothieux
+- [Ylian Sidre](https://github.com/TDEVYS)
+- [Hugo Pothieux](https://github.com/Atipi132)
 
 ## Répartition des tâches
 
-### 1. Physique et animations
+### 1. Physique et animations (Mardi 02/04/2024)
 -   [Hugo](https://github.com/Atipi132) s'occupera de faire fonctionner un sytème de physique (Réalisé pendant la séance du Mardi 02/04/2024)
 -   [Ylian](https://github.com/TDEVYS) s'occupera des animations (Réalisé pendant la séance du Mardi 02/04/2024)
 
 ### 2. Attaques et ennemis (Jeudi 04/04/2024)
--   [Hugo](https://github.com/Atipi132) a créé une nouvelle classe pour les Non-playable characters, plus particulièrement les ennemis.
 -   [Ylian](https://github.com/TDEVYS) a ajouté des animations et créé un prototype d'attaque pour le joueur.
+-   [Hugo](https://github.com/Atipi132) a créé une nouvelle classe pour les Non-playable characters, plus particulièrement les ennemis.
+
+### 3. Attaques fonctionnelles, nouvelles animations (Jeudi 11/04/2024)
+-   [Hugo](https://github.com/Atipi132) a modifié la fonction d'attaque du joueur pour qu'elle fonctionne et qu'elle tue les ennemis qu'elle touche. Un cooldown a aussi été ajouté pour éviter de garder l'attaque toujours activée.
+-   [Ylian](https://github.com/TDEVYS) a récupéré et découpé de nouveaux sprites pour le joueur à partir de [ce pack](https://legnops.itch.io/red-hood-character).
 
 ## Ressources
 
