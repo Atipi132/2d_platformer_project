@@ -1,3 +1,4 @@
+from ast import Pass
 import pygame
 
 class Sprite(pygame.sprite.Sprite):
@@ -206,9 +207,35 @@ class AttackBox(Sprite):
             self.kill()  # Destroy the attack box when its lifetime ends
 
 
+class Map():
+    def __init__(self, map_string: str):
+        self.map_string = map_string
+
+    def load(self):
+        map = pygame.sprite.Group()
+
+        max_sprite_height = 32
+        i = 0
+        j = 0
+
+        for line in self.map_string.splitlines():
+            for char in line:
+                match char:
+                    case "o":
+                        map.add(Box(i, j, "sprites/Oil_Drum.png"))
+                        i += 32
+                        max_sprite_height = max(max_sprite_height, 46)
+                    case "X":
+                        i += 32
+            j += max_sprite_height
+            max_sprite_height = 32
+            i = 0
+
+        return map
+
 def main():
     # Screen dimensions
-    WIDTH, HEIGHT = 800, 600
+    WIDTH, HEIGHT = 800, 602
 
     # Create screen
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -219,21 +246,31 @@ def main():
     # Set background
     background = pygame.image.load("background/bg.png")
 
-    # Set player and objects
-    boxes = pygame.sprite.Group()
-    for bx in range(0,600,32):
-        boxes.add(Box(bx, 450, "sprites/Oil_Drum.png"))
-
-    big_box = Box(64, 400, "sprites/Oil_Drum.png")
-    boxes.add(big_box)
-
-    player = Player(WIDTH // 2, HEIGHT // 2, boxes)
+    # Set map
+    map = Map("""
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XXXXXXXXXXXXXXXXXX
+              XoooooXXXXXXXXXXXX
+              oooooooooooooooooo
+              XXXXoooXXXXXXXXXXX
+              """).load()
+    
+    player = Player(WIDTH // 2, HEIGHT // 2, map)
 
     npc_sprite_group = pygame.sprite.Group()
     
-    npc = NonPlayingCharacter(WIDTH // 2 - 200, HEIGHT // 2 + 100, boxes, player)
+    npc = NonPlayingCharacter(WIDTH // 2 - 200, HEIGHT // 2 + 100, map, player)
     npc_sprite_group.add(npc)
-
 
     pygame.init()
 
@@ -260,7 +297,7 @@ def main():
         # Draw screen
         player.draw(screen)
         npc_sprite_group.draw(screen)
-        boxes.draw(screen)
+        map.draw(screen)
         pygame.display.flip()
 
         clock.tick(60)
