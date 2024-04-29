@@ -17,7 +17,7 @@ class Player(Sprite):
         self.stand_image = self.image
 
         #Relatif au saut
-        self.jump_images = [pygame.image.load("sprites/RedHoodSprite/SautC/RedHood-Saut ({}).png".format(i)) for i in
+        self.jump_images = [pygame.image.load("sprites/RedHoodSprite/Saut/RedHood-Saut ({}).png".format(i)) for i in
                             range(1, 56)]
         self.jump_index = 0
         self.jumping = False
@@ -32,7 +32,7 @@ class Player(Sprite):
         self.attack_cooldown = 0
 
         #Relatif à la course
-        self.walk_cycle = [pygame.image.load("sprites/RedHoodSprite/Course/RedHood-Course ({}).png".format(i)) for i in range(1, 25)]
+        self.walk_cycle = [pygame.image.load("sprites/RedHoodSprite/Course/RedHood-Course ({}).png".format(i)) for i in range(1, 48)]
         self.animation_index = 0
         self.facing_left = False
         self.speed = 5
