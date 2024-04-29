@@ -1,4 +1,5 @@
 import pygame
+import time
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, image_src: str, startx: int, starty: int):
@@ -27,8 +28,10 @@ class Player(Sprite):
         self.min_jumpspeed = 3
 
         #Relatif à l'attaque
-        self.attack_image = pygame.image.load("sprites/Punch.png")
+        self.attack_images = [pygame.image.load("sprites/RedHoodSprite/Attaque/Attaque Faible/RedHood-AttaqueFaible ({}).png".format(i)) for i in range(1, 24)]
+        self.attack_index = 0
         self.currently_attacking = False
+        self.attack_finished = True
         self.attack_cooldown = 0
 
         #Relatif à la course
@@ -72,6 +75,7 @@ class Player(Sprite):
             self.attack()
             self.attack_animation()
             horizontal_speed = 0
+            self.attack_finished = False
         else:
             self.currently_attacking = False
         
@@ -127,9 +131,17 @@ class Player(Sprite):
             self.jump_index = 0
 
     def attack_animation(self):
-        self.image = self.attack_image
-        if self.facing_left:
-            self.image = pygame.transform.flip(self.image, True, False)
+        if not self.attack_finished:
+            self.image = self.attack_images[self.attack_index]
+            if self.facing_left:
+                self.image = pygame.transform.flip(self.image, True, False)
+            self.attack_index += 1
+
+            if self.attack_index >= len(self.attack_images):
+                self.attack_index = len(self.attack_images) - 1
+                self.attack_finished = True
+        if self.attack_finished == True :
+            self.attack_index = 0
 
     def move(self, x: int, y: int):
         dx = x
