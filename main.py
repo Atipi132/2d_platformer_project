@@ -15,20 +15,29 @@ class Player(Sprite):
     def __init__(self, startx, starty, collision_group):
         super().__init__("sprites/RedHoodSprite/Course/RedHood-Idle.png", startx, starty)
         self.stand_image = self.image
-        self.jump_image = pygame.image.load("sprites/jump.png")
-        self.attack_image = pygame.image.load("sprites/Punch.png")
 
+        #Relatif au saut
+        self.jump_images = [pygame.image.load("sprites/RedHoodSprite/SautC/RedHood-Saut ({}).png".format(i)) for i in
+                            range(1, 56)]
+        self.jump_index = 0
+        self.jumping = False
+        self.jump_finished = True
+
+        self.jumpspeed = 20
+        self.min_jumpspeed = 3
+
+        #Relatif à l'attaque
+        self.attack_image = pygame.image.load("sprites/Punch.png")
+        self.currently_attacking = False
+        self.attack_cooldown = 0
+
+        #Relatif à la course
         self.walk_cycle = [pygame.image.load("sprites/RedHoodSprite/Course/RedHood-Course ({}).png".format(i)) for i in range(1, 25)]
         self.animation_index = 0
         self.facing_left = False
-
-        self.currently_attacking = False
-        self.attack_cooldown = 0
-        self.dead = False
-
         self.speed = 5
-        self.jumpspeed = 20
-        self.min_jumpspeed = 3
+
+        self.dead = False
         self.previous_key = pygame.key.get_pressed()
         self.verticalspeed = 0
         self.gravity = 1
@@ -53,6 +62,8 @@ class Player(Sprite):
 
         if key[pygame.K_UP] and onground:
             self.verticalspeed = -self.jumpspeed
+            self.jumping = True
+            self.jump_finished = False
 
         if (key[pygame.K_a] and self.attack_cooldown == 0 and not self.previous_key[pygame.K_a]) or (self.previous_key[pygame.K_a] and self.attack_cooldown != 0):
             self.currently_attacking = True
@@ -66,7 +77,9 @@ class Player(Sprite):
         
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
-            
+
+        if self.jumping:
+            self.jump_animation()
 
         if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]: # bloque le deplacement pendant l'attaque
             horizontal_speed = self.speed
@@ -100,9 +113,18 @@ class Player(Sprite):
             self.animation_index = 0
 
     def jump_animation(self):
-        self.image = self.jump_image
-        if self.facing_left:
-            self.image = pygame.transform.flip(self.image, True, False)
+        if not self.jump_finished:
+            self.image = self.jump_images[self.jump_index]
+            if self.facing_left:
+                self.image = pygame.transform.flip(self.image, True, False)
+            self.jump_index += 1
+
+
+            if self.jump_index >= len(self.jump_images):
+                self.jump_index = len(self.jump_images) - 1
+                self.jump_finished = True
+        else :
+            self.jump_index = 0
 
     def attack_animation(self):
         self.image = self.attack_image
