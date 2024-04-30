@@ -1,6 +1,5 @@
 from player import Player
 import pygame
-import time
 
 class NonPlayableCharacter(Player):
     def __init__(self, startx: int, starty: int, collision_group, player: Player):
@@ -34,9 +33,9 @@ class NonPlayableCharacter(Player):
 
     def update(self):
         horizontal_speed = 0
-        onground = self.check_collisions(0, 1, self.collision_group)
+        onground = self.check_collisions(0, 1, self.collision_group) # Permet de définir lorsque le personnage est au sol
 
-        if not self.death :
+        if not self.death : # Adopte le comportement classique lorsqu'il est vivant
             if self.side == 'L':
                 if not self.check_collisions(-1, 0, self.collision_group):
                     self.facing_left = True
@@ -58,14 +57,14 @@ class NonPlayableCharacter(Player):
                     self.walk_animation()
                     horizontal_speed = self.speed
                     self.side = 'L'
-        else :
+        else : # Coupe le comportement du personnage lorsqu'il meurt
             self.death_animation()
 
         if not onground:
             self.verticalspeed += self.gravity
 
         self.move(horizontal_speed, self.verticalspeed)
-        if self.check_collisions(0, 0, self.player_group):
+        if self.check_collisions(0, 0, self.player_group): # Comportement au contact du joueur, meurt s'il se fait toucher, tue s'il touche
             if self.player_group.sprites()[0].currently_attacking == True and self.facing_left != self.player_group.sprites()[0].facing_left:
                 print("Collision with player detected : NPC died")
                 self.death = True
@@ -74,7 +73,7 @@ class NonPlayableCharacter(Player):
                 self.player_group.sprites()[0].dead = True
                 print("Collision with player detected : Player died")
 
-    def walk_animation(self):
+    def walk_animation(self): #Gestion de l'animation de marche
         self.image = self.walk_cycle[self.animation_index]
         if self.facing_left:
             self.image = pygame.transform.flip(self.image, True, False)
@@ -83,7 +82,7 @@ class NonPlayableCharacter(Player):
             self.animation_index += 1
         else:
             self.animation_index = 0
-    def attack_animation(self):
+    def attack_animation(self): #Gestion de l'animation d'attaque
         if not self.attack_finished:
             self.image = self.attack_images[self.attack_index]
             if self.facing_left:
@@ -96,7 +95,7 @@ class NonPlayableCharacter(Player):
         if self.attack_finished == True :
             self.attack_index = 0
 
-    def death_animation(self):
+    def death_animation(self): #Gestion de l'animation de mort
         self.image = self.death_images[self.death_index]
         if self.death_index < len(self.death_images)-1 :
             self.death_index += 1
