@@ -51,7 +51,7 @@ class Player(Sprite):
             self.walk_animation()
             horizontal_speed = self.speed
         else:
-            self.image = self.stand_image    
+            self.image = self.stand_image if self.facing_left == False else pygame.transform.flip(self.stand_image, True, False)
 
         if key[pygame.K_UP] and onground:
             self.verticalspeed = -self.jumpspeed
@@ -97,9 +97,7 @@ class Player(Sprite):
 
 
     def walk_animation(self):
-        self.image = self.walk_cycle[self.animation_index]
-        if self.facing_left:
-            self.image = pygame.transform.flip(self.image, True, False)
+        self.image = pygame.transform.flip(self.walk_cycle[self.animation_index], True, False) if self.facing_left else self.walk_cycle[self.animation_index]
 
         if self.animation_index < len(self.walk_cycle) - 1:
             self.animation_index += 1
@@ -130,7 +128,7 @@ class Player(Sprite):
             if self.attack_index >= len(self.attack_images):
                 self.attack_index = len(self.attack_images) - 1
                 self.attack_finished = True
-        if self.attack_finished == True :
+        if self.attack_finished:
             self.attack_index = 0
 
     def move(self, x: int, y: int):
