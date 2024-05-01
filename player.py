@@ -35,6 +35,7 @@ class Player(Sprite):
         self.verticalspeed = 0
         self.gravity = 1
         self.collision_group = collision_group
+        self.horizontal_speed = 0
 
     def update(self):
 
