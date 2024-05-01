@@ -17,7 +17,7 @@ class Ennemy(NonPlayableCharacter):
         if self.dead == True :
             self.death_animation()
 
-        if not self.dead:
+        else:
 
             if max(player_center, ennemy_center) - min(player_center, ennemy_center)< 200:
                 if player_center > ennemy_center:
