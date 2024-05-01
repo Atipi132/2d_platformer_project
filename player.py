@@ -25,7 +25,7 @@ class Player(Sprite):
         self.attack_cooldown = 0
 
         #Relatif à la course
-        self.walk_cycle = [pygame.image.load("sprites/RedHoodSprite/Course/RedHood-Course ({}).png".format(i)) for i in range(1, 48)]
+        self.walk_cycle = [pygame.image.load("sprites/RedHoodSprite/Course/RedHood-Course ({}).png".format(i)) for i in range(1, 49)]
         self.animation_index = 0
         self.facing_left = False
         self.speed = 5
@@ -53,7 +53,7 @@ class Player(Sprite):
             self.walk_animation()
             horizontal_speed = self.speed
         else:
-            self.image = self.stand_image    
+            self.image = pygame.transform.flip(self.stand_image, True, False) if self.facing_left else self.stand_image
 
         # Relatif au saut :
         if key[pygame.K_UP] and onground:
@@ -82,13 +82,14 @@ class Player(Sprite):
         if (key[pygame.K_a] and self.attack_cooldown == 0 and not self.previous_key[pygame.K_a]) or (self.previous_key[pygame.K_a] and self.attack_cooldown != 0):
             self.currently_attacking = True
             if not self.previous_key[pygame.K_a]:
-                self.attack_cooldown = 15
+                self.attack_cooldown = 60
             self.attack()
             self.attack_animation()
             horizontal_speed = 0
             self.attack_finished = False
         else:
             self.currently_attacking = False
+            self.attack_index = 0
         
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
@@ -122,7 +123,7 @@ class Player(Sprite):
             self.jump_index += 1
 
             # Bloquer l'animation de saut pour que l'animation ne s'effectue qu'une fois lors d'un saut
-            if self.jump_index >= len(self.jump_images):
+            if self.jump_index == len(self.jump_images):
                 self.jump_index = len(self.jump_images) - 1
                 self.jump_finished = True
 
@@ -137,7 +138,7 @@ class Player(Sprite):
             self.attack_index += 1
 
             # Bloquer l'animation d'attaque pour que l'animation ne s'effectue qu'une fois lors d'un saut
-            if self.attack_index >= len(self.attack_images):
+            if self.attack_index == len(self.attack_images):
                 self.attack_index = len(self.attack_images) - 1
                 self.attack_finished = True
 

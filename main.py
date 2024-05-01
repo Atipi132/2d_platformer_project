@@ -1,8 +1,7 @@
 import pygame
 from map import Map
 from player import Player
-from nonplayablecharacter import NonPlayableCharacter
-
+from ennemy import Ennemy
 def main():
     # Screen dimensions
     WIDTH, HEIGHT = 800, 602
@@ -39,7 +38,7 @@ def main():
 
     npc_sprite_group = pygame.sprite.Group()
     
-    npc = NonPlayableCharacter(WIDTH // 2 - 200, HEIGHT // 2 + 100, map, player)
+    npc = Ennemy(WIDTH // 2 - 200, HEIGHT // 2 + 100, map, player)
     npc_sprite_group.add(npc)
 
     pygame.init()

@@ -1,5 +1,12 @@
-from sprite import Sprite
+import pygame
 
-class Box(Sprite):
-    def __init__(self, startx: int, starty: int, image_src: str):
-        super().__init__(image_src, startx, starty)
+class Box(pygame.sprite.Sprite):
+    def __init__(self, image: pygame.Surface, startx: int, starty: int):
+        super().__init__()
+
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = (startx, starty)
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)

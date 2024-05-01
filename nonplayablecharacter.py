@@ -4,15 +4,17 @@ import pygame
 class NonPlayableCharacter(Player):
     def __init__(self, startx: int, starty: int, collision_group, player: Player):
         super().__init__(startx, starty, collision_group)
-        self.side = 'L'
         group = pygame.sprite.Group()
         group.add(player)
+        
+        self.side = 'L'
+        self.player = player
         self.player_group = group
 
         # Relatif à l'attaque
         self.attack_images = [
             pygame.image.load("sprites/Squelette/Attaque/Squelette-Attaque ({}).png".format(i))
-            for i in range(1, 18)]
+            for i in range(1, 19)]
         self.attack_index = 0
         self.currently_attacking = False
         self.attack_finished = True
@@ -20,14 +22,14 @@ class NonPlayableCharacter(Player):
 
         # Relatif à la course
         self.walk_cycle = [pygame.image.load("sprites/Squelette/Marche/Squelette-Marche ({}).png".format(i)) for i in
-                           range(1, 13)]
+                           range(1, 14)]
         self.animation_index = 0
         self.facing_left = False
         self.speed = 1
 
         #Relatif à la mort
         self.death_images = [pygame.image.load("sprites/Squelette/Mort/Squelette-Mort ({}).png".format(i)) for i in
-                           range(1, 40)]
+                           range(1, 41)]
         self.death_index = 0
         self.death = False
 
@@ -64,14 +66,12 @@ class NonPlayableCharacter(Player):
             self.verticalspeed += self.gravity
 
         self.move(horizontal_speed, self.verticalspeed)
-        if self.check_collisions(0, 0, self.player_group): # Comportement au contact du joueur, meurt s'il se fait toucher, tue s'il touche
-            if self.player_group.sprites()[0].currently_attacking == True and self.facing_left != self.player_group.sprites()[0].facing_left:
-                print("Collision with player detected : NPC died")
-                self.death = True
+        if self.check_collisions(0, 0, self.player_group):
+            self.player_interaction()
 
-            elif not self.death :
-                self.player_group.sprites()[0].dead = True
-                print("Collision with player detected : Player died")
+    def player_interaction(self):
+        pass
+
 
     def walk_animation(self): #Gestion de l'animation de marche
         self.image = self.walk_cycle[self.animation_index]
