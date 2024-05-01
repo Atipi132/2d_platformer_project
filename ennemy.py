@@ -14,55 +14,60 @@ class Ennemy(NonPlayableCharacter):
         player_center = self.player.rect.centerx
         ennemy_center = self.rect.centerx
 
-        if max(player_center, ennemy_center) - min(player_center, ennemy_center)< 200:
-            if player_center > ennemy_center:
-                self.facing_left = False
-                self.walk_animation()
-                horizontal_speed = self.speed
-                self.side = 'R'
+        if self.dead == True :
+            self.death_animation()
+
+        if not self.dead:
+
+            if max(player_center, ennemy_center) - min(player_center, ennemy_center)< 200:
+                if player_center > ennemy_center:
+                    self.facing_left = False
+                    self.walk_animation()
+                    horizontal_speed = self.speed
+                    self.side = 'R'
+
+                else:
+                    self.facing_left = True
+                    self.walk_animation()
+                    horizontal_speed = -self.speed
+                    self.side = 'L'
+
+
+            elif self.side == 'L':
+                if not self.check_collisions(-1, 0, self.collision_group):
+                    self.facing_left = True
+                    self.walk_animation()
+                    horizontal_speed = -self.speed
+                else:
+                    self.facing_left = False
+                    self.walk_animation()
+                    horizontal_speed = self.speed
+                    self.side = 'R'
 
             else:
-                self.facing_left = True
-                self.walk_animation()
-                horizontal_speed = -self.speed
-                self.side = 'L'
+                if not self.check_collisions(1, 0, self.collision_group):
+                    self.facing_left = False
+                    self.walk_animation()
+                    horizontal_speed = self.speed
+                else:
+                    self.facing_left = False
+                    self.walk_animation()
+                    horizontal_speed = self.speed
+                    self.side = 'L'
 
+            if not onground:
+                self.verticalspeed += self.gravity
 
-        elif self.side == 'L':
-            if not self.check_collisions(-1, 0, self.collision_group):
-                self.facing_left = True
-                self.walk_animation()
-                horizontal_speed = -self.speed
-            else:
-                self.facing_left = False
-                self.walk_animation()
-                horizontal_speed = self.speed
-                self.side = 'R'
-        
-        else:
-            if not self.check_collisions(1, 0, self.collision_group):
-                self.facing_left = False
-                self.walk_animation()
-                horizontal_speed = self.speed
-            else:
-                self.facing_left = False
-                self.walk_animation()
-                horizontal_speed = self.speed
-                self.side = 'L'
+            self.move(horizontal_speed, self.verticalspeed)
+            if self.check_collisions(0, 0, self.player_group):
+                self.player_interaction()
 
-        if not onground:
-            self.verticalspeed += self.gravity
-
-        self.move(horizontal_speed, self.verticalspeed)
-        if self.check_collisions(0, 0, self.player_group):
-            self.player_interaction()
-            
 
     def player_interaction(self):
         if self.player_group.sprites()[0].currently_attacking == True and self.facing_left != self.player_group.sprites()[0].facing_left:
-                print("Collision with player detected : NPC died")
-                self.kill()
                 self.dead = True
+                print("Collision with player detected : NPC died")
+
 
         elif self.dead == False:
             self.player_group.sprites()[0].dead = True

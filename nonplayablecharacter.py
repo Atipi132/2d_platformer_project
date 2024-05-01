@@ -59,15 +59,16 @@ class NonPlayableCharacter(Player):
                     self.walk_animation()
                     horizontal_speed = self.speed
                     self.side = 'L'
-        else : # Coupe le comportement du personnage lorsqu'il meurt
+
+            self.move(horizontal_speed, self.verticalspeed)
+            if self.check_collisions(0, 0, self.player_group):
+                self.player_interaction()
+
+        else :
             self.death_animation()
 
         if not onground:
             self.verticalspeed += self.gravity
-
-        self.move(horizontal_speed, self.verticalspeed)
-        if self.check_collisions(0, 0, self.player_group):
-            self.player_interaction()
 
     def player_interaction(self):
         pass

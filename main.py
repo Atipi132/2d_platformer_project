@@ -48,6 +48,7 @@ def main():
 
     running = True
     while running and not player.dead:
+        clock.tick(90)
         # Check for game quit event
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

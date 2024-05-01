@@ -17,6 +17,10 @@ class Player(Sprite):
         self.jumpspeed = 20
         self.min_jumpspeed = 3
 
+        self.falling_image = [pygame.image.load("sprites/RedHoodSprite/Saut/RedHood-Saut ({}).png".format(i)) for i in
+                            range(40, 56)]
+        self.falling_index = 0
+
         #Relatif à l'attaque
         self.attack_images = [pygame.image.load("sprites/RedHoodSprite/Attaque/Attaque Faible/RedHood-AttaqueFaible ({}).png".format(i)) for i in range(1, 24)]
         self.attack_index = 0
@@ -46,11 +50,13 @@ class Player(Sprite):
         # Relatif au déplacement :
         if key[pygame.K_LEFT]:
             self.facing_left = True
-            self.walk_animation()
+            if onground :
+                self.walk_animation()
             horizontal_speed = -self.speed
         elif key[pygame.K_RIGHT]:
             self.facing_left = False
-            self.walk_animation()
+            if onground :
+                self.walk_animation()
             horizontal_speed = self.speed
         else:
             self.image = pygame.transform.flip(self.stand_image, True, False) if self.facing_left else self.stand_image
@@ -62,7 +68,8 @@ class Player(Sprite):
             self.jump_finished = False
 
         if self.jumping:
-            self.jump_animation()
+            if not onground :
+                self.jump_animation()
 
         #Gestion de la hauteur des sauts :
         if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]:
@@ -96,6 +103,10 @@ class Player(Sprite):
 
         if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]: # Bloque le deplacement pendant l'attaque
             horizontal_speed = self.speed
+
+        # Relatif à la chute
+        if not onground and not key[pygame.K_UP] :
+            self.falling_animation()
 
 
 
@@ -144,6 +155,15 @@ class Player(Sprite):
 
         else :
             self.attack_index = 0
+
+    def falling_animation(self):
+        self.image = self.falling_image[self.falling_index]
+        if self.facing_left:
+            self.image = pygame.transform.flip(self.image, True, False)
+        self.falling_index += 1
+        if self.falling_index == len(self.falling_image):
+            self.falling_index = 0
+
 
     def move(self, x: int, y: int): #Gestion des mouvements
         dx = x
