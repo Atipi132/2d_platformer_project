@@ -122,7 +122,7 @@ class Player(Sprite):
             self.jump_index += 1
 
             # Bloquer l'animation de saut pour que l'animation ne s'effectue qu'une fois lors d'un saut
-            if self.jump_index >= len(self.jump_images):
+            if self.jump_index == len(self.jump_images):
                 self.jump_index = len(self.jump_images) - 1
                 self.jump_finished = True
 
@@ -130,7 +130,6 @@ class Player(Sprite):
             self.jump_index = 0
 
     def attack_animation(self): #Gestion de l'animation d'attaque
-        print(self.attack_index)
         if not self.attack_finished:
             self.image = self.attack_images[self.attack_index]
             if self.facing_left:
@@ -138,7 +137,7 @@ class Player(Sprite):
             self.attack_index += 1
 
             # Bloquer l'animation d'attaque pour que l'animation ne s'effectue qu'une fois lors d'un saut
-            if self.attack_index >= len(self.attack_images):
+            if self.attack_index == len(self.attack_images):
                 self.attack_index = len(self.attack_images) - 1
                 self.attack_finished = True
 
