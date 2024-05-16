@@ -1,11 +1,7 @@
 from settings import *
 
-from sprite import Sprite
 import pygame
-from attackbox import AttackBox
 from pygame.math import Vector2 as vector
-from os.path import join
-from os import walk
 
 
 class Player(pygame.sprite.Sprite):
@@ -23,7 +19,7 @@ class Player(pygame.sprite.Sprite):
 
         # movement
         self.direction = vector()
-        self.speed = 20
+        self.speed = 10
         self.gravity = 5
         self.jump = False
         self.jump_height = 40
