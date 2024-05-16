@@ -58,7 +58,7 @@ class Player(Sprite):
             if onground :
                 self.walk_animation()
             horizontal_speed = self.speed
-        else:
+        elif onground:
             self.image = pygame.transform.flip(self.stand_image, True, False) if self.facing_left else self.stand_image
 
         # Relatif au saut :
@@ -67,8 +67,7 @@ class Player(Sprite):
             self.jumping = True
             self.jump_finished = False
 
-        if self.jumping:
-            if not onground :
+        if self.jumping and not onground :
                 self.jump_animation()
 
         #Gestion de la hauteur des sauts :
@@ -89,7 +88,7 @@ class Player(Sprite):
         if (key[pygame.K_a] and self.attack_cooldown == 0 and not self.previous_key[pygame.K_a]) or (self.previous_key[pygame.K_a] and self.attack_cooldown != 0):
             self.currently_attacking = True
             if not self.previous_key[pygame.K_a]:
-                self.attack_cooldown = 60
+                self.attack_cooldown = 23
             self.attack()
             self.attack_animation()
             horizontal_speed = 0
@@ -101,11 +100,8 @@ class Player(Sprite):
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
 
-        if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]: # Bloque le deplacement pendant l'attaque
-            horizontal_speed = self.speed
-
         # Relatif à la chute
-        if not onground and not key[pygame.K_UP] :
+        if not onground and self.verticalspeed > 0:
             self.falling_animation()
 
 
