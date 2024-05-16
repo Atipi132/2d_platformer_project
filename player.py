@@ -31,6 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.collision_sprites = collision_sprites
         self.on_surface = {'floor': False, 'left': False, 'right': False}
         self.platform = None
+        self.dead = False
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -89,10 +90,7 @@ class Player(pygame.sprite.Sprite):
         else:
             attack_position = (self.rect.right + 32, self.rect.centery)
 
-
-
-
-    def collision(self, axis):
+    def collision(self, axis: str):
         for sprite in self.collision_sprites:
             if sprite.rect.colliderect(self.rect) :
                 if axis == 'horizontal':

@@ -2,7 +2,6 @@ import pygame
 from pygame.math import Vector2 as vector
 from settings import *
 
-from sprite import Sprite
 class AllSprites(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
