@@ -1,0 +1,50 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "NiveauTest2.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "NiveauTest2.tmx": {
+            "scale": 2.2325,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 273.23628219484885,
+                "y": 93.16909294512878
+            }
+        },
+        "Objects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "OutdoorHouseSet.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/lubel/PycharmProjects/2d_platformer_project/sprites/Plateforme/Starter Tiles Platformer",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "NiveauTest2.tmx",
+        "OutdoorHouseSet.tsx",
+        "Objects.tsx"
+    ],
+    "project": "NiveauTest2.tiled-project",
+    "recentFiles": [
+        "Objects.tsx",
+        "OutdoorHouseSet.tsx",
+        "NiveauTest2.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
