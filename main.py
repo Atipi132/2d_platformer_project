@@ -26,7 +26,7 @@ class Game:
 
         self.assets()
 
-        self.tmx_maps = {0: load_pygame("Fichier Tiled/NiveauTest.tmx")}
+        self.tmx_maps = {0: load_pygame("Fichier Tiled/NiveauTest4.tmx")}
         self.current_stage = Level(self.tmx_maps[0], self.level_frames)
         
         self.pause_cooldown = 0
