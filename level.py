@@ -1,6 +1,7 @@
 import pygame
 from sprite import Sprite
 from player import Player
+from ennemy import Ennemy
 from groups import AllSprites
 from settings import *
 
@@ -25,6 +26,14 @@ class Level:
                     collision_sprites = self.collision_sprites,
                     frames = level_frames['player']
                 )
+            # if obj.name == "Squelette":
+            #     self.ennemy = Ennemy(
+            #         position = (obj.x, obj.y),
+            #         group = self.all_sprites,
+            #         collision_sprites = self.collision_sprites,
+            #         frames = level_frames['squelette'],
+            #         player = self.player
+            #     )
 
     def run(self, timeF):
         self.all_sprites.update(timeF)

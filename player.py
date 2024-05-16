@@ -2,8 +2,6 @@ from settings import *
 
 import pygame
 from pygame.math import Vector2 as vector
-from os.path import join
-from os import walk
 from timer import Timer
 
 

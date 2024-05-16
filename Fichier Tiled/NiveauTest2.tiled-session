@@ -9,11 +9,11 @@
     ],
     "fileStates": {
         "NiveauTest2.tmx": {
-            "scale": 2.2325,
-            "selectedLayer": 0,
+            "scale": 0.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 272.3404255319149,
-                "y": 151.84770436730122
+                "x": 169,
+                "y": 327
             }
         },
         "Objects.tsx": {

@@ -3,8 +3,8 @@ from player import Player
 from pygame.math import Vector2 as vector
 
 class Ennemy(NonPlayableCharacter):
-    def __init__(self, startx: int, starty: int, collision_group, player: Player):
-        super().__init__(startx, starty, collision_group, player)
+    def __init__(self, position, group, collision_sprites, frames, player: Player):
+        super().__init__(position, group, collision_sprites, frames)
 
         self.player = player
 
