@@ -2,6 +2,9 @@ from settings import *
 
 import pygame
 from pygame.math import Vector2 as vector
+from os.path import join
+from os import walk
+from timer import Timer
 
 
 class Player(pygame.sprite.Sprite):
@@ -19,12 +22,10 @@ class Player(pygame.sprite.Sprite):
 
         # movement
         self.direction = vector()
-        self.speed = 10
+        self.speed = 13
         self.gravity = 5
         self.jump = False
-        self.jump_height = 40
-
-        #self.min_jumpspeed = 3
+        self.jump_height = 42
 
         self.attacking = False
 
@@ -32,17 +33,23 @@ class Player(pygame.sprite.Sprite):
         self.on_surface = {'floor': False, 'left': False, 'right': False}
         self.platform = None
 
+        self.timers = {
+            'attack duration': Timer(400),
+        }
+
     def input(self):
         keys = pygame.key.get_pressed()
         input_vector = vector(0, 0)
 
         if keys[pygame.K_RIGHT]:
-            input_vector.x += 1
-            self.facing_right = True
+            if not self.attacking :
+                input_vector.x += 1
+                self.facing_right = True
 
         if keys[pygame.K_LEFT]:
-            input_vector.x -= 1
-            self.facing_right = False
+            if not self.attacking:
+                input_vector.x -= 1
+                self.facing_right = False
 
         if keys[pygame.K_a]:
             self.attack()
@@ -64,23 +71,17 @@ class Player(pygame.sprite.Sprite):
         self.direction.y += self.gravity/2 *timeF
         self.collision('vertical')
 
-        # if self.verticalspeed < 10 and not onground:
-        #    self.jump_animation()
-        #    self.verticalspeed += self.gravity
-
         if self.jump:
             if self.on_surface['floor']:
                 self.direction.y = -self.jump_height
             self.jump = False
 
-            #Gestion de la hauteur des sauts :
-            # if self.previous_key[pygame.K_UP] and not key[pygame.K_UP]:
-            #    if self.verticalspeed < -self.min_jumpspeed:
-            #        self.verticalspeed = -self.min_jumpspeed
 
     def attack(self):
-        self.attacking = True
-        self.frame_index = 0
+        if not self.timers['attack duration'].active:
+            self.attacking = True
+            self.frame_index = 0
+            self.timers['attack duration'].activate()
 
         attack_damage = 10
         attack_duration = 10
@@ -151,8 +152,14 @@ class Player(pygame.sprite.Sprite):
         else:
             self.state = 'Saut' if self.direction.y < 0 else 'Chute'
 
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
+
     def update(self, timeF):
         self.old_rect = self.rect.copy()
+        self.update_timers()
+
         self.input()
         self.move(timeF)
         self.check_contact()
