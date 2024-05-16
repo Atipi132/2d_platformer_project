@@ -83,6 +83,7 @@ class NonPlayableCharacter(Player):
             self.animation_index += 1
         else:
             self.animation_index = 0
+            
     def attack_animation(self): #Gestion de l'animation d'attaque
         if not self.attack_finished:
             self.image = self.attack_images[self.attack_index]

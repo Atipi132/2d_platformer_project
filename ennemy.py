@@ -19,19 +19,18 @@ class Ennemy(NonPlayableCharacter):
 
         else:
 
-            if max(player_center, ennemy_center) - min(player_center, ennemy_center)< 200:
-                if player_center > ennemy_center:
+            if max(player_center, ennemy_center) - min(player_center, ennemy_center) < 200:
+                if player_center > ennemy_center and not self.currently_attacking:
                     self.facing_left = False
                     self.walk_animation()
                     horizontal_speed = self.speed
                     self.side = 'R'
 
-                else:
+                elif not self.currently_attacking:
                     self.facing_left = True
                     self.walk_animation()
                     horizontal_speed = -self.speed
                     self.side = 'L'
-
 
             elif self.side == 'L':
                 if not self.check_collisions(-1, 0, self.collision_group):
@@ -65,10 +64,11 @@ class Ennemy(NonPlayableCharacter):
 
     def player_interaction(self):
         if self.player_group.sprites()[0].currently_attacking == True and self.facing_left != self.player_group.sprites()[0].facing_left:
-                self.dead = True
-                print("Collision with player detected : NPC died")
+            self.dead = True
+            print("Collision with player detected : NPC died")
 
 
         elif self.dead == False:
+            self.attack_animation()
             self.player_group.sprites()[0].dead = True
             print("Collision with player detected : Player died")

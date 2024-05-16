@@ -88,7 +88,7 @@ class Player(Sprite):
         if (key[pygame.K_a] and self.attack_cooldown == 0 and not self.previous_key[pygame.K_a]) or (self.previous_key[pygame.K_a] and self.attack_cooldown != 0):
             self.currently_attacking = True
             if not self.previous_key[pygame.K_a]:
-                self.attack_cooldown = 60
+                self.attack_cooldown = 23
             self.attack()
             self.attack_animation()
             horizontal_speed = 0
