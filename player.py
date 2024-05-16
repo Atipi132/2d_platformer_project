@@ -88,7 +88,7 @@ class Player(pygame.sprite.Sprite):
 
         attack_damage = 10
         attack_duration = 10
-        if self.facing_left:
+        if self.facing_right:
             attack_position = (self.rect.left - 32, self.rect.centery)
         else:
             attack_position = (self.rect.right + 32, self.rect.centery)

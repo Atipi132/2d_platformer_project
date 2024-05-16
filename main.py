@@ -6,15 +6,6 @@ from support import *
 import pygame_widgets.button
 import pygame_widgets.textbox
 
-quit_button = pygame_widgets.button.Button(
-        screen, 375, 291, 50, 20,
-        text='Quit',
-        fontSize=15, margin=0,
-        inactiveColour=(255, 255, 255),
-        pressedColour=(0, 255, 15),
-        radius=0,
-        onClick= lambda: pygame.quit()
-    )
 
 class Game:
     def __init__(self):
@@ -23,6 +14,9 @@ class Game:
 
         # Initialisation de l'horloge interne
         self.clock = pygame.time.Clock()
+
+        self.paused = False
+        self.running = True
 
         # Creation de l ecran de jeu
         self.display_surface = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -34,53 +28,70 @@ class Game:
 
         self.tmx_maps = {0: load_pygame("Fichier Tiled/NiveauTest2.tmx")}
         self.current_stage = Level(self.tmx_maps[0], self.level_frames)
+        
+        self.pause_cooldown = 0
 
-        paused = False
-        running = False
-        pause_cooldown = 0
+        self.quit_button = pygame_widgets.button.Button(
+            self.display_surface, WIDTH/2, HEIGHT/2, 50, 20,
+            text='Quit',
+            fontSize=15, margin=0,
+            inactiveColour=(255, 255, 255),
+            pressedColour=(0, 255, 15),
+            radius=0,
+            onClick= lambda: self.setRunning(False)
+        )
+
+        self.resumeButton = pygame_widgets.button.Button(
+            self.display_surface, WIDTH/2, HEIGHT/2 - 40, 50, 20,
+            text='Resume',
+            fontSize=15, margin=0,
+            inactiveColour=(255, 255, 255),
+            pressedColour=(0, 255, 15),
+            radius=0,
+            onClick= lambda: self.setPaused(False)
+        )
 
     def run(self):
-        running = True
         timeF = self.clock.tick()/1000
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
 
-            self.current_stage.run(timeF)
+        while self.running:
+            key = pygame.key.get_pressed()
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    self.setRunning(False)
+            if self.pause_cooldown > 0:
+                self.pause_cooldown -= 1
+            elif key[pygame.K_ESCAPE]:
+                self.setPaused(not self.paused)
+                self.pause_cooldown = 500
+
+            if not self.paused:
+                self.current_stage.run(timeF)
+                self.quit_button.hide()
+            else :
+                self.quit_button.draw()
+                self.quit_button.show()
+                pygame_widgets.update(events)
+
             pygame.display.update()
+
+        pygame.quit()
 
     def assets(self):
         self.level_frames = {
             'player': import_sub_folders('sprites', 'RedHoodSprite')
         }
 
-    def pause(self):
-        while running :
-            # Check for game quit event
-            key = pygame.key.get_pressed()
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    running = False
-            if pause_cooldown > 0:
-                pause_cooldown -= 1
-            elif key[pygame.K_ESCAPE]:
-                paused = not paused
-                pause_cooldown = 15
+    def setRunning(self, setter: bool):
+        self.running = setter
 
-        # Update player position
-        pygame.event.pump()
-        if not paused:
-            game.run()
-            quit_button.hide()
-        else :
-            quit_button.draw()
-            quit_button.show()
-            pygame_widgets.update(events)
+    def setPaused(self, setter: bool):
+        self.paused = setter
 
-    pygame.quit()
 
 if __name__ == "__main__":
+
     game = Game()
-    game.run()
+    while game.running:
+        game.run()
