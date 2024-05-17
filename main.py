@@ -70,7 +70,6 @@ class Game:
                 window_size = [window_size[0] +10, window_size[1] + 10]
                 self.display_surface = pygame.display.set_mode(window_size)
 
-
             if not self.paused:
                 self.current_stage.run(timeF)
                 self.quit_button.hide()
@@ -85,7 +84,8 @@ class Game:
 
     def assets(self):
         self.level_frames = {
-            'player': import_sub_folders('sprites', 'RedHoodSprite')
+            'player': import_sub_folders('sprites', 'RedHoodSprite'),
+            'squelette': import_sub_folders('sprites', 'Squelette')
         }
 
     def setRunning(self, setter: bool):

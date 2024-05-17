@@ -3,10 +3,11 @@ from sprite import Sprite
 from player import Player
 from ennemy import Ennemy
 from groups import AllSprites
+from pytmx import TiledMap
 from settings import *
 
 class Level:
-    def __init__(self, tmx_map, level_frames):
+    def __init__(self, tmx_map: TiledMap, level_frames: dict):
         self.display_surface = pygame.display.get_surface()
 
         self.all_sprites = AllSprites()
@@ -14,7 +15,7 @@ class Level:
 
         self.setup(tmx_map, level_frames)
 
-    def setup(self, tmx_map, level_frames):
+    def setup(self, tmx_map, level_frames: dict):
         for x,y, surface in tmx_map.get_layer_by_name('Terrain').tiles():
             Sprite((x * TILE_SIZE , y * TILE_SIZE ), surface, (self.all_sprites, self.collision_sprites))
 
@@ -26,14 +27,14 @@ class Level:
                     collision_sprites = self.collision_sprites,
                     frames = level_frames['player']
                 )
-            # if obj.name == "Squelette":
-            #     self.ennemy = Ennemy(
-            #         position = (obj.x, obj.y),
-            #         group = self.all_sprites,
-            #         collision_sprites = self.collision_sprites,
-            #         frames = level_frames['squelette'],
-            #         player = self.player
-            #     )
+            if obj.name == "Squelette":
+                self.ennemy = Ennemy(
+                    position = (obj.x, obj.y),
+                    group = self.all_sprites,
+                    collision_sprites = self.collision_sprites,
+                    frames = level_frames['squelette'],
+                    player = self.player
+                )
 
     def run(self, timeF):
         self.all_sprites.update(timeF)

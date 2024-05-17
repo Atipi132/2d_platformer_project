@@ -6,7 +6,7 @@ from timer import Timer
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, position, group, collision_sprites, frames):
+    def __init__(self, position: tuple[int, int], group : pygame.sprite.Group, collision_sprites : pygame.sprite.Group, frames):
         super().__init__(group)
 
         # image
@@ -26,6 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.jump_height = 42
 
         self.attacking = False
+        self.attack_position = (self.rect.left - 32, self.rect.centery)
 
         self.collision_sprites = collision_sprites
         self.on_surface = {'floor': False, 'left': False, 'right': False}
@@ -85,9 +86,9 @@ class Player(pygame.sprite.Sprite):
         attack_damage = 10
         attack_duration = 10
         if self.facing_right:
-            attack_position = (self.rect.left - 32, self.rect.centery)
+            self.attack_position = (self.rect.left + 32, self.rect.centery)
         else:
-            attack_position = (self.rect.right + 32, self.rect.centery)
+            self.attack_position = (self.rect.right - 32, self.rect.centery)
 
     def collision(self, axis: str):
         for sprite in self.collision_sprites:
