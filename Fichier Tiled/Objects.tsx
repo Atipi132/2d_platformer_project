@@ -5,6 +5,6 @@
   <image width="15" height="31" source="../sprites/RedHoodSprite/Idle/01.png"/>
  </tile>
  <tile id="1">
-  <image width="24" height="32" source="../sprites/Squelette/Idle/Squelette-Idle (1).png"/>
+  <image width="24" height="32" source="../sprites/Squelette/Idle/01.png"/>
  </tile>
 </tileset>
