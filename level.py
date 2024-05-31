@@ -20,7 +20,7 @@ class Level:
             Sprite((x * TILE_SIZE , y * TILE_SIZE ), surface, (self.all_sprites, self.collision_sprites))
 
         for obj in tmx_map.get_layer_by_name('Objects'):
-            if obj.name == 'Player':
+            if obj.name == "Player":
                 self.player = Player(
                     position = (obj.x, obj.y),
                     group = self.all_sprites,
@@ -28,7 +28,7 @@ class Level:
                     frames = level_frames['player']
                 )
             if obj.name == "Squelette":
-                self.ennemy = Ennemy(
+                Ennemy(
                     position = (obj.x, obj.y),
                     group = self.all_sprites,
                     collision_sprites = self.collision_sprites,
