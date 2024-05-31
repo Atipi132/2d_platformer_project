@@ -1,4 +1,5 @@
 from settings import *
+
 import pygame
 from pygame.math import Vector2 as vector
 from timer import Timer
@@ -19,11 +20,10 @@ class Player(pygame.sprite.Sprite):
 
         # movement
         self.direction = vector()
-        self.speed = 10
-        self.gravity = 3
+        self.speed = 13
+        self.gravity = 5
         self.jump = False
-        self.previousJump = False
-        self.jump_height = 30
+        self.jump_height = 42
 
         self.attacking = False
         self.attack_position = (self.rect.left - 32, self.rect.centery)
@@ -38,51 +38,44 @@ class Player(pygame.sprite.Sprite):
         }
 
     def input(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            print(keys[pygame.K_UP])
-        input_vector = vector(0, 0)
+        if not self.dead:
+            keys = pygame.key.get_pressed()
+            input_vector = vector(0, 0)
 
-        if not keys[pygame.K_UP]:
-            self.previousJump = False
+            if keys[pygame.K_RIGHT]:
+                if not self.attacking :
+                    input_vector.x += 1
+                    self.facing_right = True
 
+            if keys[pygame.K_LEFT]:
+                if not self.attacking:
+                    input_vector.x -= 1
+                    self.facing_right = False
 
-        if keys[pygame.K_RIGHT]:
-            if not self.attacking:
-                input_vector.x += 1
-                self.facing_right = True
+            if keys[pygame.K_a]:
+                self.attack()
 
-        if keys[pygame.K_LEFT]:
-            if not self.attacking:
-                input_vector.x -= 1
-                self.facing_right = False
+            self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
 
-        if keys[pygame.K_a]:
-            self.attack()
-
-        self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
-
-        if keys[pygame.K_UP] and not self.previousJump:
-            self.previousJump = True
-            self.jump = True
+            if keys[pygame.K_UP]:
+                self.jump = True
 
     def move(self, timeF):
+        if not self.dead:
+            # horizontal
+            self.rect.x += self.direction.x * self.speed * timeF
+            self.collision('horizontal')
 
-        # horizontal
-        self.rect.x += self.direction.x * self.speed * timeF
-        self.collision('horizontal')
+            # vertical
+            self.direction.y += self.gravity/2 * timeF
+            self.rect.y += self.direction.y * timeF
+            self.direction.y += self.gravity/2 *timeF
+            self.collision('vertical')
 
-        # vertical
-        self.direction.y += self.gravity/2 * timeF
-        self.rect.y += self.direction.y * timeF
-        self.direction.y += self.gravity/2 *timeF
-        self.collision('vertical')
-
-        if self.jump:
-            if self.on_surface['floor']:
-                self.direction.y = -self.jump_height
-            self.jump = False
-
+            if self.jump:
+                if self.on_surface['floor']:
+                    self.direction.y = -self.jump_height
+                self.jump = False
 
     def attack(self):
         if not self.timers['attack duration'].active:
@@ -108,7 +101,7 @@ class Player(pygame.sprite.Sprite):
                     if self.rect.right >= sprite.rect.left and int(self.old_rect.right) <= int(sprite.old_rect.left):
                         self.rect.right = sprite.rect.left
 
-                if axis == 'vertical':
+                if axis == 'vertical' :
                     # Top
                     if self.rect.top <= sprite.rect.bottom and int(self.old_rect.top) >= int(sprite.old_rect.bottom):
                         self.rect.top = sprite.rect.bottom

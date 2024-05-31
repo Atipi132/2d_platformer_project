@@ -13,9 +13,9 @@ class Ennemy(NonPlayableCharacter):
         self.player = player
 
     def input(self):
-        if not self.dead:
-            input_vector = vector(0, 0)
+        input_vector = vector(0, 0)
 
+        if not self.dead:
             player_center = self.player.rect.centerx
             ennemy_center = self.rect.centerx
 
@@ -52,13 +52,13 @@ class Ennemy(NonPlayableCharacter):
                     self.facing_right = False
                     self.state = "Course"
                     input_vector.x -= 1
-            self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
+        
+        self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
 
     def player_interaction(self):
         player_center = self.player.rect.center
         ennemy_center = self.rect.center
-
-        difference = (max(player_center[0], ennemy_center[0]) - min(player_center[0], ennemy_center[0]), max(player_center[1], ennemy_center[1]) - min(player_center[1], ennemy_center[1]))
+        difference = (max(player_center[0], ennemy_center[0]) - min(player_center[0], ennemy_center[0]), max(player_center[1], ennemy_center[1]) - min(player_center[1], ennemy_center[1])) 
 
         if self.player.attacking and self.facing_right != self.player.facing_right and self.player.attack_position[0] >= self.rect.left and max(self.player.attack_position[1], self.rect.centery) - min(self.player.attack_position[1], self.rect.centery) <= 20:
             self.dead = True

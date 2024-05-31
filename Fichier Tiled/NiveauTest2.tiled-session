@@ -25,15 +25,15 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 239.64165733482645,
-                "y": 159.68645016797313
+                "y": 160.13437849944012
             }
         },
         "NiveauTest4.tmx": {
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 711.5,
-                "y": 4209
+                "x": 4799.75,
+                "y": 3199.75
             }
         },
         "Objects.tsx": {
