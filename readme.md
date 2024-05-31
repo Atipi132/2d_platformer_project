@@ -24,6 +24,12 @@ Il faudra donc implémenter :
 -   [Hugo](https://github.com/Atipi132) a modifié la fonction d'attaque du joueur pour qu'elle fonctionne et qu'elle tue les ennemis qu'elle touche. Un cooldown a aussi été ajouté pour éviter de garder l'attaque toujours activée.
 -   [Ylian](https://github.com/TDEVYS) a récupéré et découpé de nouveaux sprites pour le joueur à partir de [ce pack](https://legnops.itch.io/red-hood-character).
 
+### 4. Nouvelle version : réécriture complète du moteur physique et de l'ennemi (Du Jeudi 11/04/2024 au Vendredi 17/05/2024)
+-   [Ylian](https://github.com/TDEVYS) a complètement réécri le moteur graphique afin de pouvoir suivre le joueur avec une caméra. Cela a été fait grâce à [ce tutoriel](https://www.youtube.com/watch?v=WViyCAa6yLI), expliquant notamment comment utiliser [Tiled](https://www.mapeditor.org/).
+
+-   [Hugo](https://github.com/Atipi132) a travaillé sur l'ennemi afin de le faire fonctionner dans ce nouveau moteur graphique.
+
+
 ## Ressources
 
 Nous nous sommes aidé de tutoriels tels que [celui-ci](https://docs.replit.com/tutorials/python/2d-platform-game) et utilisé des [ressources libres de droit pour les pour les graphismes](https://jesse-m.itch.io/jungle-pack).

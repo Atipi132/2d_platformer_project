@@ -65,6 +65,10 @@ class Game:
             elif key[pygame.K_ESCAPE]:
                 self.setPaused(not self.paused)
                 self.pause_cooldown = 500
+            elif key[pygame.K_e]:
+                window_size = pygame.display.get_window_size()
+                window_size = [window_size[0] +10, window_size[1] + 10]
+                self.display_surface = pygame.display.set_mode(window_size)
 
             if not self.paused:
                 self.current_stage.run(timeF)
@@ -80,7 +84,8 @@ class Game:
 
     def assets(self):
         self.level_frames = {
-            'player': import_sub_folders('sprites', 'RedHoodSprite')
+            'player': import_sub_folders('sprites', 'RedHoodSprite'),
+            'squelette': import_sub_folders('sprites', 'Squelette')
         }
 
     def setRunning(self, setter: bool):
