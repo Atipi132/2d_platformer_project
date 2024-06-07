@@ -19,13 +19,16 @@ class Player(pygame.sprite.Sprite):
 
         # movement
         self.direction = vector()
-        self.speed = 13
-        self.gravity = 5
+        self.speed = 10
+        self.gravity = 3
         self.jump = False
-        self.jump_height = 40
+        self.previousJump = False
+        self.jump_height = 30
 
         self.attacking = False
         self.attack_position = (self.rect.left - 32, self.rect.centery)
+
+        self.attacking = False
 
         self.collision_sprites = collision_sprites
         self.on_surface = {'floor': False, 'left': False, 'right': False}
@@ -37,9 +40,14 @@ class Player(pygame.sprite.Sprite):
         }
 
     def input(self):
+        keys = pygame.key.get_pressed()
         if not self.dead:
-            keys = pygame.key.get_pressed()
+            if keys[pygame.K_UP]:
+                print(keys[pygame.K_UP])
             input_vector = vector(0, 0)
+
+            if not keys[pygame.K_UP]:
+                self.previousJump = False
 
             if keys[pygame.K_RIGHT]:
                 if not self.attacking :
@@ -56,7 +64,8 @@ class Player(pygame.sprite.Sprite):
 
             self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
 
-            if keys[pygame.K_UP]:
+            if keys[pygame.K_UP] and not self.previousJump:
+                self.previousJump = True
                 self.jump = True
 
     def move(self, timeF):
