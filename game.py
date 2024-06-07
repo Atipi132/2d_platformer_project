@@ -39,7 +39,7 @@ class Game:
             onClick= lambda: self.setRunning(False)
         )
 
-        self.resumeButton = pygame_widgets.button.Button(
+        self.resume_button = pygame_widgets.button.Button(
             self.display_surface, WIDTH/2, HEIGHT/2 - 40, 50, 20,
             text='Resume',
             fontSize=15, margin=0,
@@ -51,6 +51,9 @@ class Game:
 
     def run(self):
         timeF = self.clock.tick()/1000
+
+        pygame.mixer.music.load('sounds\\music\\main_music.mp3')
+        pygame.mixer.music.play(-1)
 
         while self.running:
             self.pause_cooldown -= 1 if self.pause_cooldown != 0 else 0

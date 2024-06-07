@@ -1,5 +1,4 @@
 from settings import *
-
 import pygame
 from pygame.math import Vector2 as vector
 from timer import Timer
@@ -23,7 +22,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 13
         self.gravity = 5
         self.jump = False
-        self.jump_height = 42
+        self.jump_height = 40
 
         self.attacking = False
         self.attack_position = (self.rect.left - 32, self.rect.centery)
