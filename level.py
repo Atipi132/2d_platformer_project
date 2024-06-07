@@ -21,16 +21,6 @@ class Level:
         self.setup(tmx_map, level_frames)
         self.retryLevel = False
 
-        self.quit_button = pygame_widgets.button.Button(
-            self.display_surface, WIDTH / 2 - 100, HEIGHT / 2, 200, 80,
-            text='Quit',
-            fontSize=15, margin=0,
-            inactiveColour=(255, 255, 255),
-            pressedColour=(0, 255, 15),
-            radius=0,
-            onClick=lambda: self.setRunning(False)
-        )
-
         self.retryButton = pygame_widgets.button.Button(
             self.display_surface, WIDTH / 2 - 100, HEIGHT / 2 - 120, 200, 80,
             text='Retry the level',
@@ -67,13 +57,10 @@ class Level:
     def gameover(self, player):
         events = pygame.event.get()
         if player.dead:
-            self.quit_button.draw()
-            self.quit_button.show()
             self.retryButton.draw()
             self.retryButton.show()
             pygame_widgets.update(events)
         else:
-            self.quit_button.hide()
             self.retryButton.hide()
 
     def ClickRetryButton(self): # Relié au bouton retry, le but est de savoir si le bouton est cliqué pour recommencer le niveau avec RetryTheLevel

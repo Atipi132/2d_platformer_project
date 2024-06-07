@@ -77,6 +77,11 @@ class Game:
                 self.quit_button.draw()
                 self.quit_button.show()
                 pygame_widgets.update(events)
+            
+            if self.current_stage.player.dead:
+                self.quit_button.draw()
+                self.quit_button.show()
+                pygame_widgets.update(events)
 
             pygame.display.update()
 
