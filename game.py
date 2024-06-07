@@ -50,7 +50,7 @@ class Game:
         )
 
     def run(self):
-        timeF = self.clock.tick()/1000
+        timeF = self.clock.tick()/2000
 
         pygame.mixer.music.load('sounds\\music\\main_music.mp3')
         pygame.mixer.music.play(-1)
