@@ -14,3 +14,7 @@ class AllSprites(pygame.sprite.Group):
         for sprite in self:
             offset_position = sprite.rect.topleft + self.offset
             self.display_surface.blit(sprite.image, offset_position)
+
+    def kill(self):
+        for sprite in self.sprites():
+            sprite.kill()
