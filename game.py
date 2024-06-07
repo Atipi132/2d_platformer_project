@@ -30,7 +30,7 @@ class Game:
         self.pause_cooldown = 0
 
         self.quit_button = pygame_widgets.button.Button(
-            self.display_surface, WIDTH/2, HEIGHT/2, 50, 20,
+            self.display_surface, WIDTH/2 - 100, HEIGHT/2, 200, 80,
             text='Quit',
             fontSize=15, margin=0,
             inactiveColour=(255, 255, 255),
@@ -39,8 +39,8 @@ class Game:
             onClick= lambda: self.setRunning(False)
         )
 
-        self.resume_button = pygame_widgets.button.Button(
-            self.display_surface, WIDTH/2, HEIGHT/2 - 40, 50, 20,
+        self.resumeButton = pygame_widgets.button.Button(
+            self.display_surface, WIDTH/2 - 100, HEIGHT/2 - 120, 200, 80,
             text='Resume',
             fontSize=15, margin=0,
             inactiveColour=(255, 255, 255),
