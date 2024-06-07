@@ -7,9 +7,7 @@ class Sprite(pygame.sprite.Sprite):
 
         self.image = surface
         self.rect = self.image.get_rect(topleft = position)
-
         self.old_rect = self.rect.copy()
-
 
 class AnimatedSprite(Sprite):
     def __init__(self, position, frames, groups, animation_speed = ANIMATION_SPEED):
