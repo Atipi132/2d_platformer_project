@@ -60,7 +60,10 @@ class Ennemy(NonPlayableCharacter):
         ennemy_center = self.rect.center
         difference = (max(player_center[0], ennemy_center[0]) - min(player_center[0], ennemy_center[0]), max(player_center[1], ennemy_center[1]) - min(player_center[1], ennemy_center[1])) 
 
-        if self.player.attacking and self.facing_right != self.player.facing_right and self.player.attack_position[0] >= self.rect.left and max(self.player.attack_position[1], self.rect.centery) - min(self.player.attack_position[1], self.rect.centery) <= 20:
+        print(self.player.attack_position[0] >= self.rect.left)
+        print(f"attack position : {self.player.attack_position[0]}, ennemy left position : {self.rect.left}")
+
+        if self.player.attacking and self.player.attack_position[0] >= self.rect.left and max(self.player.attack_position[1], self.rect.centery) - min(self.player.attack_position[1], self.rect.centery) <= 20 and (self.player.facing_right and self.player.attack_position[0] >= self.rect.left or not self.player.facing_right and self.player.attack_position[0] <= self.rect.right):
             self.dead = True
             self.frame_index = 0
             self.state = "Mort"

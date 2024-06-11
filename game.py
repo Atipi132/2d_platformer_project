@@ -50,7 +50,10 @@ class Game:
         )
 
     def run(self):
-        timeF = self.clock.tick()/1000
+        timeF = self.clock.tick()/2000
+
+        pygame.mixer.music.load('sounds\\music\\main_music.mp3')
+        pygame.mixer.music.play(-1)
 
         while self.running:
             self.pause_cooldown -= 1 if self.pause_cooldown != 0 else 0
