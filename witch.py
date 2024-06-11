@@ -1,10 +1,11 @@
-from settings import *
 import pygame
-from nonplayablecharacter import NonPlayableCharacter
-from player import Player
 from pygame.math import Vector2 as vector
+import math
 import random
+from player import Player
+from nonplayablecharacter import NonPlayableCharacter
 from timer import Timer
+
 
 
 class Witch(NonPlayableCharacter):
@@ -29,10 +30,10 @@ class Witch(NonPlayableCharacter):
 
         if not self.dead:
             player_center = self.player.rect.centerx
-            ennemy_center = self.rect.centerx
+            witch_center = self.rect.centerx
 
-            if max(player_center, ennemy_center) - min(player_center, ennemy_center) < 200:
-                if player_center > ennemy_center:
+            if max(player_center, witch_center) - min(player_center, witch_center) < 200:
+                if player_center > witch_center:
                     self.facing_right = True
 
 
@@ -55,10 +56,10 @@ class Witch(NonPlayableCharacter):
 
     def player_interaction(self):
         player_center = self.player.rect.center
-        ennemy_center = self.rect.center
+        witch_center = self.rect.center
 
-        difference = (max(player_center[0], ennemy_center[0]) - min(player_center[0], ennemy_center[0]),
-                      max(player_center[1], ennemy_center[1]) - min(player_center[1], ennemy_center[1]))
+        difference = (max(player_center[0], witch_center[0]) - min(player_center[0], witch_center[0]),
+                      max(player_center[1], witch_center[1]) - min(player_center[1], witch_center[1]))
 
         if not self.attacking:
 
@@ -67,7 +68,7 @@ class Witch(NonPlayableCharacter):
                     self.player.attack_position[1], self.rect.centery) <= 20:
                 self.dead = True
                 self.frame_index = 0
-                self.state = "Mort"
+                self.state = 'Death'
                 print("Collision with player detected : NPC died")
 
             if not self.charging and not self.timers['cooldown'].active:
@@ -111,10 +112,13 @@ class Witch(NonPlayableCharacter):
                 self.teleporting = False
                 self.state = 'Idle'
 
-        if self.dead and self.frame_index <= len(self.frames[self.state]):
-            self.frame_index += 1
-            self.state = "Mort"
+            self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
 
-        self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
+        if self.dead:
+            if not math.ceil(self.frame_index) == len(self.frames['Death']):
+                self.frame_index += 1*timeF
+                self.state = 'Death'
+
+            self.image = self.frames['Death'][int(self.frame_index % len(self.frames['Death']))]
+
         self.image = self.image if self.facing_right else pygame.transform.flip(self.image, True, False)
-
