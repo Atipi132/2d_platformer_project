@@ -13,8 +13,8 @@ class Door(pygame.sprite.Sprite):
 
         self.collision_sprites = collision_sprites
 
-        self.tmx_maps = {0: load_pygame("Fichier Tiled/Level1.tmx"),
-                         1: load_pygame("Fichier Tiled/Level2.tmx")}
+        self.tmx_maps = {0: load_pygame("TiledFiles/Level1.tmx"),
+                         1: load_pygame("TiledFiles/Level2.tmx")}
         self.level = level
 
     def collision(self):
