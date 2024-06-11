@@ -29,8 +29,9 @@ class Game:
 
         self.assets()
 
-        self.tmx_maps = {0: load_pygame("Fichier Tiled/Level1.tmx")}
-        self.current_stage = Level(self.tmx_maps[0], self.level_frames)       
+        self.tmx_maps = {0: load_pygame("TiledFiles/Level1.tmx"),
+                         1: load_pygame('TiledFiles/Level2.tmx')}
+        self.current_stage = Level(self.tmx_maps[1], self.level_frames)
         self.pause_cooldown = 0
 
         self.quit_button = pygame_widgets.button.Button(
@@ -56,9 +57,6 @@ class Game:
 
     def run(self):
         timeF = self.clock.tick()/2000
-
-        pygame.mixer.music.load('sounds\\music\\main_music.mp3')
-        pygame.mixer.music.play(-1)
 
         while self.running:
             self.pause_cooldown -= 1 if self.pause_cooldown != 0 else 0
@@ -87,6 +85,7 @@ class Game:
         self.level_frames = {
             'player': import_sub_folders('sprites', 'RedHoodSprite'),
             'squelette': import_sub_folders('sprites', 'Squelette'),
+            'witch': import_sub_folders('sprites', 'witch')
         }
 
     def setRunning(self, setter: bool):

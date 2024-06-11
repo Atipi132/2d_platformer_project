@@ -8,6 +8,7 @@ from door import Door
 from settings import *
 import pygame_widgets.button
 import pygame_widgets.textbox
+from witch import Witch
 
 class Level:
     def __init__(self, tmx_map: TiledMap, level_frames: dict):
@@ -32,27 +33,34 @@ class Level:
             onClick=lambda: self.ClickRetryButton()
         )
 
-
-
     def setup(self, tmx_map, level_frames: dict):
         for x,y, surface in tmx_map.get_layer_by_name('Terrain').tiles():
-            Sprite((x * TILE_SIZE , y * TILE_SIZE ), surface, (self.all_sprites, self.collision_sprites))
+            Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites))
 
         for obj in tmx_map.get_layer_by_name('Objects'):
             if obj.name == "Player":
                 self.player = Player(
-                    position = (obj.x, obj.y),
-                    group = self.all_sprites,
-                    collision_sprites = self.collision_sprites,
-                    frames = level_frames['player']
+                    position=(obj.x, obj.y),
+                    group=self.all_sprites,
+                    collision_sprites=self.collision_sprites,
+                    frames=level_frames['player']
                 )
             if obj.name == "Squelette":
                 Ennemy(
-                    position = (obj.x, obj.y),
-                    group = self.all_sprites,
-                    collision_sprites = self.collision_sprites,
-                    frames = level_frames['squelette'],
-                    player = self.player
+                    position=(obj.x, obj.y),
+                    group=self.all_sprites,
+                    collision_sprites=self.collision_sprites,
+                    frames=level_frames['squelette'],
+                    player=self.player
+                )
+
+            if obj.name == "Witch":
+                Witch(
+                    position=(obj.x, obj.y),
+                    group=self.all_sprites,
+                    collision_sprites=self.collision_sprites,
+                    frames=level_frames['witch'],
+                    player=self.player
                 )
             if obj.name == "door":
                 Door(
@@ -80,7 +88,6 @@ class Level:
             self.all_sprites.kill()
             self.setup(tmx_map, level_frames)
             self.retryLevel = False
-
 
     def run(self, timeF):
         self.all_sprites.update(timeF)
