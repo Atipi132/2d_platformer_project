@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
 
         # movement
         self.direction = vector()
-        self.speed = 10
+        self.speed = 15
         self.gravity = 3
         self.jump = False
         self.previousJump = False
@@ -42,8 +42,6 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
         if not self.dead:
-            if keys[pygame.K_UP]:
-                print(keys[pygame.K_UP])
             input_vector = vector(0, 0)
 
             if not keys[pygame.K_UP]:
