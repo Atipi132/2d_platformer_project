@@ -73,7 +73,7 @@ class Witch(NonPlayableCharacter):
 
             if not self.charging and not self.timers['cooldown'].active:
 
-                if difference[1] <= 40 :
+                if difference[1] <= 40:
                     self.frame_index = 0
                     self.teleporting = True
                     self.rect.centerx += random.randint(-200, 200)
@@ -82,6 +82,12 @@ class Witch(NonPlayableCharacter):
                 if not self.dead:
                     self.charging = True
                     self.timers['charge duration'].activate()
+
+        else :
+            if not self.dead and difference[1] <= 40:
+                # print(max(player_center, ennemy_center) - min(player_center, ennemy_center))
+                self.player.dead = True
+                print("Collision with player detected : Player died")
 
     def animate(self, timeF):
         if not self.dead:
