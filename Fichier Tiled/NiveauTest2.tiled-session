@@ -3,19 +3,50 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "Level1.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
         "DarkCastle.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInDock": 3
+        },
+        "Level1.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 5.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 3799.727272727273,
+                "y": 3703.545454545455
+            }
+        },
+        "NiveauTest.tmx": {
+            "scale": 0.2080078125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3997.4460093896714,
+                "y": 3997.4460093896714
+            }
+        },
+        "NiveauTest2.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 268.5,
+                "y": 189.5
+            }
         },
         "Objects.tsx": {
-            "dynamicWrapping": true
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "OutdoorHouseSet.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInDock": 2
         },
         "cavesofgallet_tiles.tsx": {
             "scaleInDock": 1,
@@ -28,18 +59,27 @@
         "cavesofgallet_tiles3.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 8
+        },
+        "porte.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         }
     },
-    "last.imagePath": "C:/Users/lubel/PycharmProjects/2d_platformer_project/sprites/Plateforme/Starter Tiles Platformer",
-    "map.height": 400,
+    "last.imagePath": "C:/Users/hugop/Documents/ESIREM/2A/python/2d_platformer_project/sprites/Plateforme/Starter Tiles Platformer/DarkCastleTiles",
+    "map.height": 1,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 600,
+    "map.width": 1,
     "openFiles": [
+        "Level1.tmx"
     ],
     "project": "",
     "recentFiles": [
+        "Level1.tmx",
+        "Objects.tsx",
+        "porte.tsx",
         "cavesofgallet_tiles3.tsx",
         "cavesofgallet_tiles2.tsx",
         "cavesofgallet_tiles.tsx"

@@ -4,6 +4,7 @@ from player import Player
 from ennemy import Ennemy
 from groups import AllSprites
 from pytmx import TiledMap
+from door import Door
 from settings import *
 import pygame_widgets.button
 import pygame_widgets.textbox
@@ -53,6 +54,14 @@ class Level:
                     frames = level_frames['squelette'],
                     player = self.player
                 )
+            if obj.name == "door":
+                Door(
+                    position = (obj.x, obj.y),
+                    group = self.all_sprites,
+                    collision_sprites = pygame.sprite.Group(self.player),
+                    level = self 
+                )
+
 
     def gameover(self, player):
         events = pygame.event.get()
@@ -66,7 +75,7 @@ class Level:
     def ClickRetryButton(self): # Relié au bouton retry, le but est de savoir si le bouton est cliqué pour recommencer le niveau avec RetryTheLevel
         self.retryLevel = True
 
-    def RetryTheLevel(self,timeF, tmx_map, level_frames): # Recommence le niveau, supprimes le niveau puis le reconstruit
+    def RetryTheLevel(self, tmx_map, level_frames): # Recommence le niveau, supprimes le niveau puis le reconstruit
         if self.retryLevel:
             self.all_sprites.kill()
             self.setup(tmx_map, level_frames)
@@ -75,7 +84,7 @@ class Level:
 
     def run(self, timeF):
         self.all_sprites.update(timeF)
-        self.display_surface.fill('green')
+        self.display_surface.fill('gray')
         self.all_sprites.draw(self.player.rect.center, timeF)
         self.gameover(self.player)
-        self.RetryTheLevel(self, self.tmx_map, self.level_frames)
+        self.RetryTheLevel(self.tmx_map, self.level_frames)

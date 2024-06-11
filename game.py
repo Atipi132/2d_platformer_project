@@ -1,4 +1,6 @@
+import pygame.ftfont
 from settings import *
+from os import environ
 import pygame
 from pytmx.util_pygame import load_pygame
 from level import Level
@@ -9,7 +11,9 @@ import pygame_widgets.textbox
 class Game:
     def __init__(self):
 
+        environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
+        pygame.font.init()
 
         # Initialisation de l'horloge interne
         self.clock = pygame.time.Clock()
@@ -17,7 +21,7 @@ class Game:
         self.paused = False
         self.running = True
 
-        # Creation de l ecran de jeu
+        # Creation de l'ecran de jeu
         self.display_surface = pygame.display.set_mode((WIDTH, HEIGHT))
 
         # Set window title
@@ -38,6 +42,7 @@ class Game:
             radius=0,
             onClick= lambda: self.setRunning(False)
         )
+
 
         self.resumeButton = pygame_widgets.button.Button(
             self.display_surface, WIDTH/2 - 100, HEIGHT/2 - 120, 200, 80,
@@ -65,22 +70,13 @@ class Game:
             if key[pygame.K_ESCAPE] and self.pause_cooldown == 0:
                 self.setPaused(not self.paused)
                 self.pause_cooldown = 500 if self.paused else 50
-            elif key[pygame.K_e]:
-                window_size = pygame.display.get_window_size()
-                window_size = [window_size[0] +10, window_size[1] + 10]
-                self.display_surface = pygame.display.set_mode(window_size)
 
             if not self.paused:
                 self.current_stage.run(timeF)
-                self.quit_button.hide()
             else :
-                self.quit_button.draw()
-                self.quit_button.show()
                 pygame_widgets.update(events)
             
             if self.current_stage.player.dead:
-                self.quit_button.draw()
-                self.quit_button.show()
                 pygame_widgets.update(events)
 
             pygame.display.update()
@@ -90,7 +86,7 @@ class Game:
     def assets(self):
         self.level_frames = {
             'player': import_sub_folders('sprites', 'RedHoodSprite'),
-            'squelette': import_sub_folders('sprites', 'Squelette')
+            'squelette': import_sub_folders('sprites', 'Squelette'),
         }
 
     def setRunning(self, setter: bool):

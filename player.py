@@ -105,17 +105,25 @@ class Player(pygame.sprite.Sprite):
                     # Gauche
                     if self.rect.left <= sprite.rect.right and int(self.old_rect.left) >= int(sprite.old_rect.right):
                         self.rect.left = sprite.rect.right
+                        if sprite.image == pygame.image.load("C:\\Users\\hugop\\Documents\\ESIREM\\2A\\python\\2d_platformer_project\\sprites\\Plateforme\\Starter Tiles Platformer\\DarkCastleTiles\\DarkCastle_9_16x16.png"):
+                            print("door collision detected")
                     # Droite
                     if self.rect.right >= sprite.rect.left and int(self.old_rect.right) <= int(sprite.old_rect.left):
                         self.rect.right = sprite.rect.left
+                        if sprite.image == pygame.image.load("C:\\Users\\hugop\\Documents\\ESIREM\\2A\\python\\2d_platformer_project\\sprites\\Plateforme\\Starter Tiles Platformer\\DarkCastleTiles\\DarkCastle_9_16x16.png"):
+                            print("door collision detected")
 
                 if axis == 'vertical' :
                     # Top
                     if self.rect.top <= sprite.rect.bottom and int(self.old_rect.top) >= int(sprite.old_rect.bottom):
                         self.rect.top = sprite.rect.bottom
+                        if sprite.image == pygame.image.load("C:\\Users\\hugop\\Documents\\ESIREM\\2A\\python\\2d_platformer_project\\sprites\\Plateforme\\Starter Tiles Platformer\\DarkCastleTiles\\DarkCastle_9_16x16.png"):
+                            print("door collision detected")
                     # Bottom
                     if self.rect.bottom >= sprite.rect.top and int(self.old_rect.bottom <= sprite.old_rect.top):
                         self.rect.bottom = sprite.rect.top
+                        if sprite.image == pygame.image.load("C:\\Users\\hugop\\Documents\\ESIREM\\2A\\python\\2d_platformer_project\\sprites\\Plateforme\\Starter Tiles Platformer\\DarkCastleTiles\\DarkCastle_9_16x16.png"):
+                            print("door collision detected")
                     self.direction.y = 0
 
     def check_contact(self):
@@ -131,7 +139,6 @@ class Player(pygame.sprite.Sprite):
         self.on_surface['floor'] = True if floor_rect.collidelist(collide_rects) >= 0 else False
         self.on_surface['right'] = True if right_rect.collidelist(collide_rects) >= 0 else False
         self.on_surface['left'] = True if left_rect.collidelist(collide_rects) >= 0 else False
-
 
 
     def animate(self, timeF):
