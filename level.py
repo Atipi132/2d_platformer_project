@@ -4,6 +4,7 @@ from player import Player
 from ennemy import Ennemy
 from groups import AllSprites
 from pytmx import TiledMap
+from door import Door
 from settings import *
 import pygame_widgets.button
 import pygame_widgets.textbox
@@ -21,16 +22,6 @@ class Level:
 
         self.setup(tmx_map, level_frames)
         self.retryLevel = False
-
-        self.quit_button = pygame_widgets.button.Button(
-            self.display_surface, WIDTH / 2 - 100, HEIGHT / 2, 200, 80,
-            text='Quit',
-            fontSize=15, margin=0,
-            inactiveColour=(255, 255, 255),
-            pressedColour=(0, 255, 15),
-            radius=0,
-            onClick=lambda: self.setRunning(False)
-        )
 
         self.retryButton = pygame_widgets.button.Button(
             self.display_surface, WIDTH / 2 - 100, HEIGHT / 2 - 120, 200, 80,
@@ -71,23 +62,28 @@ class Level:
                     frames=level_frames['witch'],
                     player=self.player
                 )
+            if obj.name == "door":
+                Door(
+                    position = (obj.x, obj.y),
+                    group = self.all_sprites,
+                    collision_sprites = pygame.sprite.Group(self.player),
+                    level = self 
+                )
+
 
     def gameover(self, player):
         events = pygame.event.get()
         if player.dead:
-            self.quit_button.draw()
-            self.quit_button.show()
             self.retryButton.draw()
             self.retryButton.show()
             pygame_widgets.update(events)
         else:
-            self.quit_button.hide()
             self.retryButton.hide()
 
     def ClickRetryButton(self): # Relié au bouton retry, le but est de savoir si le bouton est cliqué pour recommencer le niveau avec RetryTheLevel
         self.retryLevel = True
 
-    def RetryTheLevel(self,timeF, tmx_map, level_frames): # Recommence le niveau, supprimes le niveau puis le reconstruit
+    def RetryTheLevel(self, tmx_map, level_frames): # Recommence le niveau, supprimes le niveau puis le reconstruit
         if self.retryLevel:
             self.all_sprites.kill()
             self.setup(tmx_map, level_frames)
@@ -95,7 +91,7 @@ class Level:
 
     def run(self, timeF):
         self.all_sprites.update(timeF)
-        self.display_surface.fill('green')
+        self.display_surface.fill('gray')
         self.all_sprites.draw(self.player.rect.center, timeF)
         self.gameover(self.player)
-        self.RetryTheLevel(self, self.tmx_map, self.level_frames)
+        self.RetryTheLevel(self.tmx_map, self.level_frames)
