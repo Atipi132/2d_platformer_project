@@ -6,7 +6,7 @@ class Door(pygame.sprite.Sprite):
     def __init__(self, position: tuple[int, int], group : pygame.sprite.Group, collision_sprites : pygame.sprite.Group, level):
         super().__init__(group)
 
-        self.image = pygame.image.load("C:\\Users\\hugop\\Documents\\ESIREM\\2A\\python\\2d_platformer_project\\sprites\\Plateforme\\Starter Tiles Platformer\\DarkCastleTiles\\DarkCastle_9_16x16.png")
+        self.image = pygame.image.load("sprites\\Plateforme\\Starter Tiles Platformer\\DarkCastleTiles\\DarkCastle_9_16x16.png")
 
         self.rect = self.image.get_rect(topleft = position)
         self.old_rect = self.rect.copy()

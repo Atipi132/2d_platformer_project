@@ -28,7 +28,7 @@ class Level:
             text='Retry the level',
             fontSize=15, margin=0,
             inactiveColour=(255, 255, 255),
-            pressedColour=(0, 255, 15),
+            pressedColour=(0, 0, 0),
             radius=0,
             onClick=lambda: self.ClickRetryButton()
         )

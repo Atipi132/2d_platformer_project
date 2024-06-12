@@ -39,7 +39,7 @@ class Game:
             text='Quit',
             fontSize=15, margin=0,
             inactiveColour=(255, 255, 255),
-            pressedColour=(0, 255, 15),
+            pressedColour=(0, 0, 0),
             radius=0,
             onClick= lambda: self.setRunning(False)
         )
@@ -50,7 +50,7 @@ class Game:
             text='Resume',
             fontSize=15, margin=0,
             inactiveColour=(255, 255, 255),
-            pressedColour=(0, 255, 15),
+            pressedColour=(0, 0, 0),
             radius=0,
             onClick= lambda: self.setPaused(False)
         )
