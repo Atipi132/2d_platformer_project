@@ -21,7 +21,7 @@ class Level:
         self.level_frames = level_frames
 
         self.setup(tmx_map, level_frames)
-        self.retryLevel = False
+        self.ReloadLevel = False
 
         self.retryButton = pygame_widgets.button.Button(
             self.display_surface, WIDTH / 2 - 100, HEIGHT / 2 - 120, 200, 80,
@@ -45,7 +45,7 @@ class Level:
                     collision_sprites=self.collision_sprites,
                     frames=level_frames['player']
                 )
-            if obj.name == "Squelette":
+            if obj.name == "Skeleton":
                 Ennemy(
                     position=(obj.x, obj.y),
                     group=self.all_sprites,
@@ -64,10 +64,10 @@ class Level:
                 )
             if obj.name == "door":
                 Door(
-                    position = (obj.x, obj.y),
-                    group = self.all_sprites,
-                    collision_sprites = pygame.sprite.Group(self.player),
-                    level = self 
+                    position=(obj.x, obj.y),
+                    group=self.all_sprites,
+                    collision_sprites=pygame.sprite.Group(self.player),
+                    level=self
                 )
 
 
@@ -81,17 +81,17 @@ class Level:
             self.retryButton.hide()
 
     def ClickRetryButton(self): # Relié au bouton retry, le but est de savoir si le bouton est cliqué pour recommencer le niveau avec RetryTheLevel
-        self.retryLevel = True
+        self.ReloadLevel = True
 
-    def RetryTheLevel(self, tmx_map, level_frames): # Recommence le niveau, supprimes le niveau puis le reconstruit
-        if self.retryLevel:
+    def ReloadTheLevel(self, tmx_map, level_frames): # Recommence le niveau, supprimes le niveau puis le reconstruit
+        if self.ReloadLevel:
             self.all_sprites.kill()
             self.setup(tmx_map, level_frames)
-            self.retryLevel = False
+            self.ReloadLevel = False
 
-    def run(self, timeF):
-        self.all_sprites.update(timeF)
+    def run(self, GameTime):
+        self.all_sprites.update(GameTime)
         self.display_surface.fill('gray')
-        self.all_sprites.draw(self.player.rect.center, timeF)
+        self.all_sprites.draw(self.player.rect.center, GameTime)
         self.gameover(self.player)
-        self.RetryTheLevel(self.tmx_map, self.level_frames)
+        self.ReloadTheLevel(self.tmx_map, self.level_frames)
