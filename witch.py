@@ -20,11 +20,12 @@ class Witch(NonPlayableCharacter):
         self.teleporting = False
         self.attack_connecting = False
 
+        # Timers for various actions
         self.timers = {
-            'charge duration': Timer(1200), # Temps de charge de l'attaque magique
-            'attack duration': Timer(400), # Temps d'une attaque magique
-            'cooldown': Timer(900), # Temps avant de pouvoir de nouveau agir
-            'cooldownhit': Timer(20)
+            'charge duration': Timer(1200), # Charging time
+            'attack duration': Timer(400), # Attacking time
+            'cooldown': Timer(900), # Cooldown before action
+            'cooldownhit': Timer(20) # Cooldown to make a hit less strong
         }
 
     def input(self):

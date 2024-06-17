@@ -15,6 +15,7 @@ class Ennemy(NonPlayableCharacter):
 
         self.attack_connecting = False
 
+        # Timers for various actions
         self.timers = {
             'attack duration': Timer(400),
             'cooldownhit': Timer(200)

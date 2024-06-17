@@ -12,17 +12,19 @@ from witch import Witch
 
 class Level:
     def __init__(self, tmx_map: TiledMap, level_frames: dict):
-        self.display_surface = pygame.display.get_surface()
+        self.display_surface = pygame.display.get_surface() # Get the main display surface
 
-        self.all_sprites = AllSprites()
-        self.collision_sprites = pygame.sprite.Group()
+        self.all_sprites = AllSprites() # Group to contain all sprites
+        self.collision_sprites = pygame.sprite.Group() # Group for collision detection
 
-        self.tmx_map = tmx_map
-        self.level_frames = level_frames
 
-        self.setup(tmx_map, level_frames)
-        self.ReloadLevel = False
+        self.tmx_map = tmx_map # Store the Tiled map
+        self.level_frames = level_frames # Store frames for different entities
 
+        self.setup(tmx_map, level_frames)  # Set up the level with map and frames
+        self.ReloadLevel = False # Flag to indicate if the level needs to be reloaded
+
+        # Initialize the retry button with its properties and click action
         self.retryButton = pygame_widgets.button.Button(
             self.display_surface, WIDTH / 2 - 100, HEIGHT / 2 - 120, 200, 80,
             text='Retry the level',
@@ -34,10 +36,10 @@ class Level:
         )
 
     def setup(self, tmx_map, level_frames: dict):
-        for x,y, surface in tmx_map.get_layer_by_name('Terrain').tiles():
+        for x,y, surface in tmx_map.get_layer_by_name('Terrain').tiles(): # Set up terrain tiles
             Sprite((x * TILE_SIZE, y * TILE_SIZE), surface, (self.all_sprites, self.collision_sprites))
 
-        for obj in tmx_map.get_layer_by_name('Objects'):
+        for obj in tmx_map.get_layer_by_name('Objects'): # Set up objects like player, enemies, and door
             if obj.name == "Player":
                 self.player = Player(
                     position=(obj.x, obj.y),
@@ -71,7 +73,7 @@ class Level:
                 )
 
 
-    def gameover(self, player):
+    def gameover(self, player): # Show the retry button when the player die
         events = pygame.event.get()
         if player.dead:
             self.retryButton.draw()
@@ -80,18 +82,18 @@ class Level:
         else:
             self.retryButton.hide()
 
-    def ClickRetryButton(self): # Relié au bouton retry, le but est de savoir si le bouton est cliqué pour recommencer le niveau avec RetryTheLevel
+    def ClickRetryButton(self): # Linked with the Retry button, it is needed because of the properties of the onClick componant of the button
         self.ReloadLevel = True
 
-    def ReloadTheLevel(self, tmx_map, level_frames): # Recommence le niveau, supprimes le niveau puis le reconstruit
+    def ReloadTheLevel(self, tmx_map, level_frames): # used to reload the level, it will delete all the loaded sprite before resetting new ones.
         if self.ReloadLevel:
             self.all_sprites.kill()
             self.setup(tmx_map, level_frames)
             self.ReloadLevel = False
 
-    def run(self, GameTime):
-        self.all_sprites.update(GameTime)
-        self.display_surface.fill('gray')
-        self.all_sprites.draw(self.player.rect.center, GameTime)
-        self.gameover(self.player)
-        self.ReloadTheLevel(self.tmx_map, self.level_frames)
+    def run(self, GameTime): # Main game loop logic
+        self.all_sprites.update(GameTime)  # Update all sprites
+        self.display_surface.fill('gray')  # Clear the display surface
+        self.all_sprites.draw(self.player.rect.center, GameTime)  # Draw all sprites centered on the player
+        self.gameover(self.player)  # Check if the game is over
+        self.ReloadTheLevel(self.tmx_map, self.level_frames)  # Reload the level if needed
