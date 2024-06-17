@@ -97,9 +97,9 @@ class Witch(NonPlayableCharacter):
             self.player.dead = True
             print("Collision with player detected : Player died")
 
-    def animate(self, timeF):
+    def animate(self, GameTime):
         if not self.dead:
-            self.frame_index += 1 * timeF
+            self.frame_index += 1 * GameTime
             if self.timers['charge duration'].active:
                 self.state = 'Charge'
 
@@ -111,9 +111,9 @@ class Witch(NonPlayableCharacter):
 
             if self.attacking:
                 if not self.facing_right:
-                    self.state = 'Attaque'
+                    self.state = 'Attack'
                 else:
-                    self.state = 'Attaque'
+                    self.state = 'Attack'
 
             if self.attacking and not self.timers['attack duration'].active:
                 self.attacking = False
@@ -130,7 +130,7 @@ class Witch(NonPlayableCharacter):
 
         if self.dead:
             if not math.ceil(self.frame_index) == len(self.frames['Death']):
-                self.frame_index += 1*timeF
+                self.frame_index += 1*GameTime
                 self.state = 'Death'
                 self.gravity += 1
                 self.direction.y = self.gravity

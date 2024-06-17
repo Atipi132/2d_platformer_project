@@ -8,7 +8,7 @@ class AllSprites(pygame.sprite.Group):
         self.display_surface = pygame.display.get_surface()
         self.offset = vector()
 
-    def draw(self, target_position, timeF):
+    def draw(self, target_position, GameTime):
         self.offset.x = -(target_position[0] - WIDTH/2)
         self.offset.y = -(target_position[1] - HEIGHT / 2)
         for sprite in self:

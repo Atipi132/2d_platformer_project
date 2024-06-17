@@ -813,7 +813,7 @@
  </layer>
  <objectgroup id="2" name="Objects">
   <object id="1" name="Player" gid="26" x="1185.5" y="4478" width="15" height="31"/>
-  <object id="3" name="Squelette" gid="27" x="3287.5" y="3691" width="24" height="32"/>
+  <object id="3" name="Skeleton" gid="27" x="3287.5" y="3691" width="24" height="32"/>
   <object id="6" name="door" gid="28" x="3792.18" y="3696" width="16" height="16"/>
   <object id="8" name="door" gid="28" x="3792.36" y="3680" width="16" height="16"/>
  </objectgroup>
