@@ -5,7 +5,7 @@
   <image width="15" height="31" source="../sprites/RedHoodSprite/Idle/01.png"/>
  </tile>
  <tile id="1">
-  <image width="24" height="32" source="../sprites/Squelette/Idle/01.png"/>
+  <image width="24" height="32" source="../sprites/Skeleton/Idle/01.png"/>
  </tile>
  <tile id="2">
   <image width="32" height="48" source="../sprites/Witch/Idle/01.png"/>

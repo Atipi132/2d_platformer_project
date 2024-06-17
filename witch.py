@@ -18,11 +18,13 @@ class Witch(NonPlayableCharacter):
         self.gravity = 0
         self.charging = False
         self.teleporting = False
+        self.attack_connecting = False
 
         self.timers = {
             'charge duration': Timer(1200), # Temps de charge de l'attaque magique
             'attack duration': Timer(400), # Temps d'une attaque magique
-            'cooldown': Timer(900) # Temps avant de pouvoir de nouveau agir
+            'cooldown': Timer(900), # Temps avant de pouvoir de nouveau agir
+            'cooldownhit': Timer(20)
         }
 
     def input(self):
@@ -32,14 +34,13 @@ class Witch(NonPlayableCharacter):
             player_center = self.player.rect.centerx
             witch_center = self.rect.centerx
 
+            #if not self.charging and not self.attacking:
+
             if max(player_center, witch_center) - min(player_center, witch_center) < 200:
                 if player_center > witch_center:
                     self.facing_right = True
-
-
                 else:
                     self.facing_right = False
-
                 self.player_interaction()
 
             elif not self.facing_right:
@@ -65,7 +66,7 @@ class Witch(NonPlayableCharacter):
 
             if self.player.attacking and self.facing_right != self.player.facing_right and self.player.attack_position[
                 0] >= self.rect.left and max(self.player.attack_position[1], self.rect.centery) - min(
-                    self.player.attack_position[1], self.rect.centery) <= 20:
+                    self.player.attack_position[1], self.rect.centery) <= 15:
                 self.dead = True
                 self.frame_index = 0
                 self.state = 'Death'
@@ -73,7 +74,7 @@ class Witch(NonPlayableCharacter):
 
             if not self.charging and not self.timers['cooldown'].active:
 
-                if difference[1] <= 40 :
+                if difference[0] <= 40:
                     self.frame_index = 0
                     self.teleporting = True
                     self.rect.centerx += random.randint(-200, 200)
@@ -83,9 +84,22 @@ class Witch(NonPlayableCharacter):
                     self.charging = True
                     self.timers['charge duration'].activate()
 
-    def animate(self, timeF):
+        else:
+            if not self.dead:
+                # print(max(player_center, ennemy_center) - min(player_center, ennemy_center))
+                if not self.timers['cooldownhit'].active:
+                    self.timers['cooldownhit'].activate()
+
+                if difference[0] <= 90 and difference[1] <= self.rect.centery - self.rect.y:
+                    self.attack_connecting = True
+
+        if not self.timers['cooldownhit'].active and self.attack_connecting:
+            self.player.dead = True
+            print("Collision with player detected : Player died")
+
+    def animate(self, GameTime):
         if not self.dead:
-            self.frame_index += 1 * timeF
+            self.frame_index += 1 * GameTime
             if self.timers['charge duration'].active:
                 self.state = 'Charge'
 
@@ -97,9 +111,9 @@ class Witch(NonPlayableCharacter):
 
             if self.attacking:
                 if not self.facing_right:
-                    self.state = 'Attaque'
+                    self.state = 'Attack'
                 else:
-                    self.state = 'Attaque'
+                    self.state = 'Attack'
 
             if self.attacking and not self.timers['attack duration'].active:
                 self.attacking = False
@@ -116,8 +130,10 @@ class Witch(NonPlayableCharacter):
 
         if self.dead:
             if not math.ceil(self.frame_index) == len(self.frames['Death']):
-                self.frame_index += 1*timeF
+                self.frame_index += 1*GameTime
                 self.state = 'Death'
+                self.gravity += 1
+                self.direction.y = self.gravity
 
             self.image = self.frames['Death'][int(self.frame_index % len(self.frames['Death']))]
 

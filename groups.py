@@ -7,7 +7,7 @@ class AllSprites(pygame.sprite.Group):
         self.display_surface = pygame.display.get_surface()
         self.offset = vector()
 
-    def draw(self, target_position, timeF):
+    def draw(self, target_position, GameTime):
         with open("settings.py", "r") as settings:
             size = settings.readlines()[0].split("= ")[1].split(", ")
             settings.close()
