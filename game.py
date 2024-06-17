@@ -63,7 +63,7 @@ class Game:
         )
 
     def run(self):
-        GameTime = self.clock.tick()/2000
+        GameTime = self.clock.tick()/3000
 
         while self.running:
             self.pause_cooldown -= 1 if self.pause_cooldown != 0 else 0

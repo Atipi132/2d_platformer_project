@@ -21,8 +21,6 @@ def startGameWithSelectedSize():
 
         root.destroy()
 
-        sleep(2)
-
         game = Game()
         while game.running:
             game.run()
