@@ -17,16 +17,28 @@ class Level:
         self.all_sprites = AllSprites() # Group to contain all sprites
         self.collision_sprites = pygame.sprite.Group() # Group for collision detection
 
-
-        self.tmx_map = tmx_map # Store the Tiled map
-        self.level_frames = level_frames # Store frames for different entities
-
+        self.tmx_map = tmx_map  # Store the Tiled map
+        self.level_frames = level_frames  # Store frames for different entities
         self.setup(tmx_map, level_frames)  # Set up the level with map and frames
         self.ReloadLevel = False # Flag to indicate if the level needs to be reloaded
 
+        with open("settings.py", "r") as settings:
+            size = tuple(settings.readlines()[0].split("= ")[1].split(", "))
+            print(size)
+            settings.close()
+        self.size = (int(size[0]), int(size[1]))
+
+        self.setup(tmx_map, level_frames)
+        self.ReloadLevel = False
+        with open("settings.py", "r") as settings:
+            size = tuple(settings.readlines()[0].split("= ")[1].split(", "))
+            print(size)
+            settings.close()
+        self.size  = (int(size[0]), int(size[1]))
+
         # Initialize the retry button with its properties and click action
         self.retryButton = pygame_widgets.button.Button(
-            self.display_surface, WIDTH / 2 - 100, HEIGHT / 2 - 120, 200, 80,
+            self.display_surface, self.size[0] / 2 - 100, self.size[1] / 2 - 120, 200, 80,
             text='Retry the level',
             fontSize=15, margin=0,
             inactiveColour=(255, 255, 255),

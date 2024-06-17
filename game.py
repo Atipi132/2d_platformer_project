@@ -22,7 +22,12 @@ class Game:
         self.running = True
 
         # Creation of the gaming screen :
-        self.display_surface = pygame.display.set_mode((WIDTH, HEIGHT))
+        with open("settings.py", "r") as settings:
+            size = tuple(settings.readlines()[0].split("= ")[1].split(", "))
+            print(size)
+            settings.close()
+        self.size  = (int(size[0]), int(size[1]))
+        self.display_surface = pygame.display.set_mode((self.size[0], self.size[1]))
 
         # Set window title :
         pygame.display.set_caption("Escape of the RedHood")
@@ -37,7 +42,7 @@ class Game:
 
         # Building the quit button of the game
         self.quit_button = pygame_widgets.button.Button(
-            self.display_surface, WIDTH/2 - 100, HEIGHT/2, 200, 80,
+            self.display_surface, self.size[0]/2 - 100, self.size[1]/2, 200, 80,
             text='Quit',
             fontSize=15, margin=0,
             inactiveColour=(255, 255, 255),
@@ -48,7 +53,7 @@ class Game:
 
         # Building the resume button of the game
         self.resumeButton = pygame_widgets.button.Button(
-            self.display_surface, WIDTH/2 - 100, HEIGHT/2 - 120, 200, 80,
+            self.display_surface, self.size[0]/2 - 100, self.size[1]/2 - 120, 200, 80,
             text='Resume',
             fontSize=15, margin=0,
             inactiveColour=(255, 255, 255),
@@ -58,7 +63,7 @@ class Game:
         )
 
     def run(self):
-        GameTime = self.clock.tick()/2000
+        GameTime = self.clock.tick()/3000
 
         while self.running:
             self.pause_cooldown -= 1 if self.pause_cooldown != 0 else 0
@@ -96,3 +101,6 @@ class Game:
 
     def setPaused(self, setter: bool):
         self.paused = setter
+
+    def setSize(self, setter: tuple):
+        self.size = setter

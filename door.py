@@ -1,6 +1,5 @@
 import pygame
 from pytmx.util_pygame import load_pygame
-from pygame.math import Vector2 as vector
 
 class Door(pygame.sprite.Sprite):
     def __init__(self, position: tuple[int, int], group: pygame.sprite.Group, collision_sprites: pygame.sprite.Group, level):
