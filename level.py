@@ -24,7 +24,6 @@ class Level:
 
         with open("settings.py", "r") as settings:
             size = tuple(settings.readlines()[0].split("= ")[1].split(", "))
-            print(size)
             settings.close()
         self.size = (int(size[0]), int(size[1]))
 
@@ -32,7 +31,6 @@ class Level:
         self.ReloadLevel = False
         with open("settings.py", "r") as settings:
             size = tuple(settings.readlines()[0].split("= ")[1].split(", "))
-            print(size)
             settings.close()
         self.size  = (int(size[0]), int(size[1]))
 
@@ -97,7 +95,7 @@ class Level:
     def ClickRetryButton(self): # Linked with the Retry button, it is needed because of the properties of the onClick componant of the button
         self.ReloadLevel = True
 
-    def ReloadTheLevel(self, tmx_map, level_frames): # used to reload the level, it will delete all the loaded sprite before resetting new ones.
+    def ReloadTheLevel(self, tmx_map: TiledMap, level_frames): # used to reload the level, it will delete all the loaded sprite before resetting new ones.
         if self.ReloadLevel:
             self.all_sprites.kill()
             self.setup(tmx_map, level_frames)
