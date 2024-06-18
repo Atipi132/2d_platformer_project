@@ -63,7 +63,10 @@ class Game:
         )
 
     def run(self):
-        GameTime = self.clock.tick()/3000
+        if self.current_stage.tmx_map == load_pygame("TiledFiles/Level1.tmx"):      
+            GameTime = self.clock.tick()/4000
+        else: 
+            GameTime = self.clock.tick()/3000
 
         while self.running:
             self.pause_cooldown -= 1 if self.pause_cooldown != 0 else 0
