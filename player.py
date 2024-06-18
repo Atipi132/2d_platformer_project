@@ -25,17 +25,19 @@ class Player(pygame.sprite.Sprite):
         self.speed = 10
         self.gravity = 3
         self.jump = False
-        self.previousJump = False
+        self.JumpKeyReleased = False
         self.jump_height = 30
 
         # Relative to the attack :
         self.attacking = False
+        self.AttackKeyReleased = False
         self.attack_position = (self.rect.left - 32, self.rect.centery)
 
         self.platform = None
 
         self.dead = False
 
+        # Timers for various actions
         self.timers = {
             'attack duration': Timer(400),
         }
@@ -45,40 +47,52 @@ class Player(pygame.sprite.Sprite):
         if not self.dead:
             input_vector = vector(0, 0)
 
-            if not keys[pygame.K_UP]:
-                self.previousJump = False
-
+            # Check for right movement
             if keys[pygame.K_RIGHT]:
                 if not self.attacking:
                     input_vector.x += 1
                     self.facing_right = True
 
+            # Check for left movement
             if keys[pygame.K_LEFT]:
                 if not self.attacking:
                     input_vector.x -= 1
                     self.facing_right = False
 
-            if keys[pygame.K_a]:
-                self.attack()
+            # Check if the player is holding the attack key
+            if not keys[pygame.K_a]:
+                self.AttackKeyReleased = False
 
-            if keys[pygame.K_UP] and not self.previousJump:
-                self.previousJump = True
+            # Check for attack action
+            if keys[pygame.K_a] and not self.AttackKeyReleased:
+                self.attack()
+                self.AttackKeyReleased = True
+
+            # Check if the player is not holding the jump key
+            if not keys[pygame.K_UP]:
+                self.JumpKeyReleased = False
+
+            # Check for jump action
+            if keys[pygame.K_UP] and not self.JumpKeyReleased:
+                self.JumpKeyReleased = True
                 self.jump = True
 
+            # Normalize the input vector for consistent speed
             self.direction.x = input_vector.normalize().x if input_vector else input_vector.x
 
     def move(self, GameTime):
         if not self.dead:
-            # horizontal
+            # Horizontal movement and collision
             self.rect.x += self.direction.x * self.speed * GameTime
             self.collision('horizontal')
 
-            # vertical
+            # Apply gravity for vertical movement and vertical collision
             self.direction.y += self.gravity/2 * GameTime
             self.rect.y += self.direction.y * GameTime
-            self.direction.y += self.gravity/2 *GameTime
+            self.direction.y += self.gravity/2 * GameTime
             self.collision('vertical')
 
+            # Handle jumping
             if self.jump:
                 if self.on_surface['floor']:
                     self.direction.y = -self.jump_height
@@ -90,8 +104,7 @@ class Player(pygame.sprite.Sprite):
             self.frame_index = 0
             self.timers['attack duration'].activate()
 
-        attack_damage = 10
-        attack_duration = 10
+        # Set attack position based on facing direction
         if self.facing_right:
             self.attack_position = (self.rect.left + 32, self.rect.centery)
         else:
@@ -126,20 +139,22 @@ class Player(pygame.sprite.Sprite):
                     self.direction.y = 0
 
     def check_contact(self):
-        floor_rect = pygame.Rect(self.rect.bottomleft, (self.rect.width, 2))
-        right_rect = pygame.Rect(self.rect.topright + vector(0, self.rect.height / 4),
+        # Define rectangles for floor, right, and left contact detection
+        floor_rect = pygame.Rect(self.rect.bottomleft, (self.rect.width, 2)) # Create a rectangle at the bottom, it will be used for the floor collision
+        right_rect = pygame.Rect(self.rect.topright + vector(0, self.rect.height / 4), # Create a rectangle at the topright, it will be used for the right collision
                                  (2, self.rect.height / 2))
-        left_rect = pygame.Rect(self.rect.topleft + vector(-2, self.rect.height / 4),
+        left_rect = pygame.Rect(self.rect.topleft + vector(-2, self.rect.height / 4), # Create a rectangle at the topleft, it will be used for the left collision
                                 (2, self.rect.height / 2))
 
         collide_rects = [sprite.rect for sprite in self.collision_sprites]
 
-        # collisions
+        # # Check for collisions and update surface contact status
         self.on_surface['floor'] = True if floor_rect.collidelist(collide_rects) >= 0 else False
         self.on_surface['right'] = True if right_rect.collidelist(collide_rects) >= 0 else False
         self.on_surface['left'] = True if left_rect.collidelist(collide_rects) >= 0 else False
 
     def animate(self, GameTime):
+        # Update frame index based on animation speed
         self.frame_index += ANIMATION_SPEED * GameTime
         if self.state == 'Attack' and self.frame_index >= len(self.frames[self.state]):
             self.state = 'Idle'
@@ -152,6 +167,7 @@ class Player(pygame.sprite.Sprite):
             self.attacking = False
 
     def get_state(self):
+        # Update the player's state based on their current actions and position
         if self.on_surface['floor']:
             if self.attacking:
                 self.state = 'Attack'
@@ -161,6 +177,7 @@ class Player(pygame.sprite.Sprite):
             self.state = 'Jump' if self.direction.y < 0 else 'Fall'
 
     def update_timers(self):
+        # Update all timers
         for timer in self.timers.values():
             timer.update()
 

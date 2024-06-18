@@ -12,6 +12,16 @@ class Witch(NonPlayableCharacter):
     def __init__(self, position, group, collision_sprites, frames, player: Player):
         super().__init__(position, group, collision_sprites, frames)
 
+        self.startingPositionX = self.rect.centerx
+        self.startingPositionY = self.rect.centery
+        self.maximumX = self.startingPositionX + 400
+        self.minimumX = self.startingPositionX - 400
+        self.maximumY = self.startingPositionY + 100
+        self.minimumY = self.startingPositionY - 10
+
+        self.newPositionX = 0
+        self.newPositionY = 0
+
         self.state = "Idle"
         self.speed = 5
         self.player = player
@@ -20,11 +30,12 @@ class Witch(NonPlayableCharacter):
         self.teleporting = False
         self.attack_connecting = False
 
+        # Timers for various actions
         self.timers = {
-            'charge duration': Timer(1200), # Temps de charge de l'attaque magique
-            'attack duration': Timer(400), # Temps d'une attaque magique
-            'cooldown': Timer(900), # Temps avant de pouvoir de nouveau agir
-            'cooldownhit': Timer(20)
+            'charge duration': Timer(1200), # Charging time
+            'attack duration': Timer(400), # Attacking time
+            'cooldown': Timer(900), # Cooldown before action
+            'cooldownhit': Timer(20) # Cooldown to make a hit less strong
         }
 
     def input(self):
@@ -33,8 +44,6 @@ class Witch(NonPlayableCharacter):
         if not self.dead:
             player_center = self.player.rect.centerx
             witch_center = self.rect.centerx
-
-            #if not self.charging and not self.attacking:
 
             if max(player_center, witch_center) - min(player_center, witch_center) < 200:
                 if player_center > witch_center:
@@ -61,32 +70,31 @@ class Witch(NonPlayableCharacter):
 
         difference = (max(player_center[0], witch_center[0]) - min(player_center[0], witch_center[0]),
                       max(player_center[1], witch_center[1]) - min(player_center[1], witch_center[1]))
+        if not self.dead:
+            if not self.attacking:
 
-        if not self.attacking:
-
-            if self.player.attacking and self.facing_right != self.player.facing_right and self.player.attack_position[
-                0] >= self.rect.left and max(self.player.attack_position[1], self.rect.centery) - min(
-                    self.player.attack_position[1], self.rect.centery) <= 15:
-                self.dead = True
-                self.frame_index = 0
-                self.state = 'Death'
-                print("Collision with player detected : NPC died")
-
-            if not self.charging and not self.timers['cooldown'].active:
-
-                if difference[0] <= 40:
+                if self.player.attacking and self.facing_right != self.player.facing_right and self.player.attack_position[
+                    0] >= self.rect.left and max(self.player.attack_position[1], self.rect.centery) - min(
+                        self.player.attack_position[1], self.rect.centery) <= 15:
+                    self.dead = True
                     self.frame_index = 0
-                    self.teleporting = True
-                    self.rect.centerx += random.randint(-200, 200)
-                    #self.rect.centery += random.randint(-200, 200)
+                    self.state = 'Death'
+                    print("Collision with player detected : NPC died")
 
-                if not self.dead:
-                    self.charging = True
-                    self.timers['charge duration'].activate()
+                if not self.charging and not self.timers['cooldown'].active:
 
-        else:
-            if not self.dead:
-                # print(max(player_center, ennemy_center) - min(player_center, ennemy_center))
+                    if difference[0] <= 40:
+                        self.teleportation()
+
+                    if 40 <= difference[0] <= 100 and self.minimumY <= self.player.rect.centery <= self.maximumY :
+                        self.frame_index = 0
+                        self.teleporting = True
+                        self.rect.centery = self.player.rect.centery
+
+                        self.charging = True
+                        self.timers['charge duration'].activate()
+
+            else:
                 if not self.timers['cooldownhit'].active:
                     self.timers['cooldownhit'].activate()
 
@@ -96,6 +104,18 @@ class Witch(NonPlayableCharacter):
         if not self.timers['cooldownhit'].active and self.attack_connecting:
             self.player.dead = True
             print("Collision with player detected : Player died")
+
+    def teleportation(self):
+        self.frame_index = 0
+        self.teleporting = True
+        self.newPositionX = random.randint(-200, 200)
+        self.newPositionY = random.randint(-200, 200)
+
+        if self.rect.centerx + self.newPositionX < self.minimumX or self.rect.centerx + self.newPositionX > self.maximumX or self.rect.centery + self.newPositionY < self.minimumY or self.rect.centery + self.newPositionY > self.maximumY:
+            self.teleportation()
+
+        self.rect.centerx += self.newPositionX
+        self.rect.centery += self.newPositionY
 
     def animate(self, GameTime):
         if not self.dead:
