@@ -3,8 +3,9 @@ Nous tenterons dans ce projet de créer quelques niveaux d'un platformeur 2D, in
 Il faudra donc implémenter :
 - Un personnage pouvant bouger et effectuer des actions suivant les touches appuyées par l'utilisateur
 - De la physique pour implémenter un saut, une vitesse ainsi qu'une chute
-- Des arrières plans pour rendre le jeu plus vivants
-- Des ennemies pouvant infliger des dégats au joueur
+- Des arrières plans pour rendre le jeu plus vivant
+- Des ennemis pouvant infliger des dégats au joueur
+- Plusieurs niveaux
 
 ## Membres de l'équipe
 - [Ylian Sidre](https://github.com/TDEVYS)
