@@ -28,10 +28,12 @@ class Witch(NonPlayableCharacter):
         self.gravity = 0
         self.charging = False
         self.teleporting = False
+        self.TeleportationToAttack = False
         self.attack_connecting = False
 
         # Timers for various actions
         self.timers = {
+            'teleportation cooldown' : Timer(120), #Teleportation Cooldown
             'charge duration': Timer(1200), # Charging time
             'attack duration': Timer(400), # Attacking time
             'cooldown': Timer(900), # Cooldown before action
@@ -86,13 +88,13 @@ class Witch(NonPlayableCharacter):
                     if difference[0] <= 40:
                         self.teleportation()
 
-                    if 40 <= difference[0] <= 100 and self.minimumY <= self.player.rect.centery <= self.maximumY :
-                        self.frame_index = 0
+                    if 40 <= difference[0] <= 100 and self.minimumY <= self.player.rect.centery <= self.maximumY and not self.timers['teleportation cooldown'].active:
+                        if not self.TeleportationToAttack:
+                            self.frame_index = 0
+                        self.TeleportationToAttack = True
                         self.teleporting = True
-                        self.rect.centery = self.player.rect.centery
-
-                        self.charging = True
-                        self.timers['charge duration'].activate()
+                        self.timers['teleportation cooldown'].activate()
+                        self.rect.centery = self.player.rect.centery + 10
 
             else:
                 if not self.timers['cooldownhit'].active:
@@ -144,13 +146,19 @@ class Witch(NonPlayableCharacter):
 
             if self.state == 'Teleportation' and self.frame_index >= len(self.frames[self.state]):
                 self.teleporting = False
-                self.state = 'Idle'
+
+                if self.TeleportationToAttack:
+                    self.charging = True
+                    self.timers['charge duration'].activate()
+                    self.TeleportationToAttack = False
+                else:
+                    self.state = 'Idle'
 
             self.image = self.frames[self.state][int(self.frame_index % len(self.frames[self.state]))]
 
         if self.dead:
             if not math.ceil(self.frame_index) == len(self.frames['Death']):
-                self.frame_index += 1*GameTime
+                self.frame_index += 1 * GameTime
                 self.state = 'Death'
                 self.gravity += 1
                 self.direction.y = self.gravity
