@@ -24,7 +24,6 @@ class Game:
         # Creation of the gaming screen :
         with open("settings.py", "r") as settings:
             size = tuple(settings.readlines()[0].split("= ")[1].split(", "))
-            print(size)
             settings.close()
         self.size  = (int(size[0]), int(size[1]))
         self.display_surface = pygame.display.set_mode((self.size[0], self.size[1]))
@@ -35,9 +34,9 @@ class Game:
         self.assets()
 
         # Path to the map :
-        self.tmx_maps = {0: load_pygame("TiledFiles/Level1.tmx"),
-                         1: load_pygame("TiledFiles/Level2.tmx")}
-        self.current_stage = Level(self.tmx_maps[0], self.level_frames)
+        self.tmx_maps = {0: "TiledFiles/Level1.tmx",
+                         1: "TiledFiles/Level2.tmx"}
+        self.current_stage = Level(load_pygame(self.tmx_maps[0]), self.level_frames)
         self.pause_cooldown = 0
 
         # Building the quit button of the game
@@ -63,10 +62,10 @@ class Game:
         )
 
     def run(self):
-        if self.current_stage.tmx_map == load_pygame("TiledFiles/Level1.tmx"):      
-            GameTime = self.clock.tick()/4000
+        if self.current_stage.tmx_map == self.tmx_maps[0]:      
+            GameTime = self.clock.tick(60)/2000
         else: 
-            GameTime = self.clock.tick()/3000
+            GameTime = self.clock.tick(60)/1000
 
         while self.running:
             self.pause_cooldown -= 1 if self.pause_cooldown != 0 else 0

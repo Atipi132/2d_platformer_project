@@ -7,7 +7,6 @@ root = tk.Tk()
 def startGameWithSelectedSize():
     for i in listbox.curselection():
         size = listbox.get(i).split("x")
-        print(f"Window size selected : {size}")
 
         with open("settings.py", "r") as settings:
             lines = settings.readlines()
