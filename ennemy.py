@@ -87,11 +87,9 @@ class Ennemy(NonPlayableCharacter):
                 if not self.timers['cooldownhit'].active and not self.attack_connecting:
                     self.timers['cooldownhit'].activate()
 
-                print(self.attack_connecting)
-
                 if difference[1] <= 20:
                     self.attack_connecting = True
-        print('Timer', self.timers['cooldownhit'].active)
+
         if not self.timers['cooldownhit'].active and self.attack_connecting:
             self.player.dead = True
             print("Collision with player detected : Player died")
