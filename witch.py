@@ -16,8 +16,8 @@ class Witch(NonPlayableCharacter):
         self.startingPositionY = self.rect.centery
         self.maximumX = self.startingPositionX + 400
         self.minimumX = self.startingPositionX - 400
-        self.maximumY = self.startingPositionY + 100
-        self.minimumY = self.startingPositionY - 10
+        self.maximumY = self.startingPositionY + 200
+        self.minimumY = self.startingPositionY
 
         self.newPositionX = 0
         self.newPositionY = 0
@@ -109,13 +109,13 @@ class Witch(NonPlayableCharacter):
         self.frame_index = 0
         self.teleporting = True
         self.newPositionX = random.randint(-200, 200)
-        self.newPositionY = random.randint(-200, 200)
+        self.newPositionY = random.randint(-100, 100)
 
         if self.rect.centerx + self.newPositionX < self.minimumX or self.rect.centerx + self.newPositionX > self.maximumX or self.rect.centery + self.newPositionY < self.minimumY or self.rect.centery + self.newPositionY > self.maximumY:
             self.teleportation()
-
-        self.rect.centerx += self.newPositionX
-        self.rect.centery += self.newPositionY
+        else:
+            self.rect.centerx += self.newPositionX
+            self.rect.centery += self.newPositionY
 
     def animate(self, GameTime):
         if not self.dead:
