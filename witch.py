@@ -33,11 +33,11 @@ class Witch(NonPlayableCharacter):
 
         # Timers for various actions
         self.timers = {
-            'teleportation cooldown' : Timer(120), #Teleportation Cooldown
-            'charge duration': Timer(1200), # Charging time
-            'attack duration': Timer(400), # Attacking time
-            'cooldown': Timer(900), # Cooldown before action
-            'cooldownhit': Timer(20) # Cooldown to make a hit less strong
+            'teleportation cooldown': Timer(120),  # Teleportation Cooldown
+            'charge duration': Timer(1200),  # Charging time
+            'attack duration': Timer(400),  # Attacking time
+            'cooldown': Timer(900),  # Cooldown before action
+            'cooldownhit': Timer(20)  # Cooldown to make a hit less strong
         }
 
     def input(self):
