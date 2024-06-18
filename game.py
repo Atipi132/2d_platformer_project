@@ -61,6 +61,10 @@ class Game:
             onClick=lambda: self.setPaused(False)
         )
 
+        # Play main music
+        pygame.mixer.music.load('sounds/music/main_music.mp3')
+        pygame.mixer.music.play(-1)
+
     def run(self):
         if self.current_stage.tmx_map == self.tmx_maps[0]:      
             GameTime = self.clock.tick()/1500
