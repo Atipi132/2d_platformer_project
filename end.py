@@ -17,8 +17,9 @@ class End(pygame.sprite.Sprite):
 
     def collision(self): # Collision with the door
         for sprite in self.collision_sprites:
+            print(self.rect.left, sprite.rect.right)
             if self.rect.left == sprite.rect.right: # Check for collision on the left side
-                print("End")
+                print("End collision detected")
                 self.level.ReloadLevel = True # Set the level reload flag to True
                 self.level.ReloadTheLevel(self.tmx_maps[0], self.level.level_frames)
                 self.level.tmx_map = self.tmx_maps[0] # Update the current map to the next map
